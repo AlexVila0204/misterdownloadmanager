@@ -9,8 +9,12 @@
 //! the new one numbered. One path for every format and for the external tool, and a failure
 //! leaves nothing behind but the archive.
 //!
+//! A finished archive can be tested as well ([`check`], #1661): every entry read back and
+//! checked, nothing written, and a ZIP's damaged entries placed in the file.
+//!
 //! Portable, no unsafe, no UI and no words: errors are an enum the app words.
 
+pub mod check;
 mod external;
 pub mod hatchzip;
 pub mod safe;
@@ -22,6 +26,7 @@ mod zip_fmt;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicBool;
 
+pub use check::{Damage, Verdict};
 pub use external::find_7zip;
 pub use hatchzip::find_hatchzip;
 pub use safe::Limits;

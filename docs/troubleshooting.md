@@ -20,6 +20,14 @@ Every download keeps a log of its recent events: retries, redirects, the server'
 6. If it says **this site lets only browsers through**, the site's bot check (Cloudflare's, for one) turned MDM away. MDM has already asked once more connecting the way your browser does, with your browser's cookies for that site, and once under its own name (some checks let a program that says what it is through), and the site still wants its check answered in a browser. Hold **Alt** (**Option** on a Mac) as you click the link: the browser opens it in the tab, runs the site's check there ("Just a moment...", sometimes a box to tick), and keeps the download that comes after it. MDM leaves that download alone for a minute after your click. See [Browser integration](browser-integration.md#keys-to-force-or-prevent-capture).
 7. If it says **the site sent a web page instead of the file**, the link led to the site's own page: a file host's countdown, a captcha, a **Download** button to press, or a sign-in. MDM never saves that page as your file. Click **Open in browser** in the download's progress window (or open the link yourself), finish there, and when the browser starts the real download, MDM's extension hands it to MDM. Without the extension, let the browser download it.
 
+## A download says Damaged
+
+Its archive's test found files in it that don't read back whole ([Testing archives](link-grabber.md#testing-archives)): hover over **Status** to see which.
+
+1. Right-click → **Redownload** (or the **Damaged archive** window's **Redownload**) downloads it again from the start.
+2. A ZIP whose damaged parts MDM downloaded again and still came damaged, or a 7z or RAR that is damaged again after a **Redownload**, is probably damaged on the server itself: ask the site for another copy.
+3. To test it again by hand, right-click → **Test archive**.
+
 ## A download starts over instead of resuming
 
 - Look at **Resume capability** in the progress window. **No** means the server can't send a file in parts, so MDM can't continue it later.

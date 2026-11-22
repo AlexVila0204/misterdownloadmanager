@@ -12,6 +12,11 @@
 #. {n} = a number (keep the braces as they are)
 #, machine
 @plural	An unknown site wants to send {n} link to Link grabber.|An unknown site wants to send {n} links to Link grabber.	ᏂᎦᏔᎲᎾ ས་ᏚᏓᏢᏒᎢ ᎤᏚᎵᎭ {n} ᎠᏕᎳᏗᏗᏍᏙᏗ ᎦᏟᏐᏗᏱ ᎦᏟᏐᏗᏍᎩ.|ᏂᎦᏔᎲᎾ ས་ᏚᏓᏢᏒᎢ ᎤᏚᎵᎭ {n} ᎠᏕᎳᏗᏗᏍᏙᏗ ᎦᏟᏐᏗᏱ ᎦᏟᏐᏗᏍᎩ.
+#. count in traypanel.rs
+#. the notification-area icon's panel (#1365), under the downloads it lists: how many others are running; {n} a number
+#. {n} = a number (keep the braces as they are)
+#, machine
+@plural	And {n} more|And {n} more	ᎠᎴ {n} ᎢᎪᎯ|ᎠᎴ {n} ᎢᎪᎯ
 #. count in torrent downloads
 #. number of additional files in a list of files
 #. {n} = a number (keep the braces as they are)
@@ -49,11 +54,21 @@
 #. {n} = a number (keep the braces as they are)
 #, machine
 @plural	Matches {n} article now (it adds new ones only):|Matches {n} articles now (it adds new ones only):	ᎪᎯ {n} ᏗᎦᎴᏴᏔᏅᎯ ᎤᏓ合Ꮧ (ᎢᏤ ᎢᎬᏱᏱ ᏗᎪᏍᏓᏱ):|ᎪᎯ {n} ᏗᎦᎴᏴᏔᏅᎯ ᎤᏓ合Ꮧ (ᎢᏤ ᎢᎬᏱᏱ ᏗᎪᏍᏓᏱ):
+#. count in archtest.rs
+#. in a download's log: the archive test found files in it that don't read back whole; {n} how many, {files} their names
+#. {n} = a number (keep the braces as they are)
+#, machine
+@plural	The archive test found {n} damaged file: {files}|The archive test found {n} damaged files: {files}	ᎠᏍᏆᏂᎪᏛᎢ ᏗᎪᎵᏯ {n} ᎤᏲᏨᎯ ᏗᎪᏪᎵ ᎤᏩᏛᎲᎢ: {files}|ᎠᏍᏆᏂᎪᏛᎢ ᏗᎪᎵᏯ {n} ᎤᏲᏨᎯ ᏗᎪᏪᎵ ᎤᏩᏛᎲᎢ: {files}
 #. count in a dialog box
 #. Cancel in Download File Info with downloads waiting behind it
 #. {n} = a number (keep the braces as they are)
 #, machine
 @plural	There is {n} more download waiting. Cancel it too?|There are {n} more downloads waiting. Cancel them too?	ᎠᏏᏴᏫ {n} ᎨᏒᎢ ᎠᎦᏘᏴᎢ. ᎾᏍᏉ ᎾᏍᎩᏍᎪ ᎠᏲᏍᏗᏍᎪᎢ?|ᎠᏂᏏᏴᏫ {n} ᎨᏒᎢ ᎠᏂᎦᏘᏴᎢ. ᎾᏍᏉ ᎾᏍᎩᏍᎪ ᎠᏲᏍᏗᏍᎪᎢ?
+#. count in a dialog box
+#. under "Also delete the files from disk", while it is ticked: how many of the downloads being deleted are finished, whose complete files are deleted from the disk too
+#. {n} = a number (keep the braces as they are)
+#, machine
+@plural	This also deletes {n} finished file.|This also deletes {n} finished files.	འདི་ {n} ᎤᏍᏆᏛᎯ ᏗᎪᏪᎵ ᎾᏍᏉ ᎦᎸᏙᏗ.|འདི་ {n} ᎤᏍᏆᏛᎯ ᏗᎪᏪᎵ ᎾᏍᏉ ᎦᎸᏙᏗ.
 #. count in a dialog box
 #. under the first failed downloads in the summary of a group of downloads: {n} more failed (Show in list shows them all)
 #. {n} = a number (keep the braces as they are)
@@ -222,6 +237,11 @@
 #. a 24-hour clock, with an example
 #, machine
 	24-hour (21:41)	24-ოᎢ (21:41)
+#. text in archtest.rs
+#. why an archive wasn't tested (after "Couldn't test {name}: "); 7-Zip is a program's name, {error} its words, in English
+#. {error} = an error message (keep the braces as they are)
+#, machine
+	7-Zip couldn't test it ({error})	7-Zip ᎥᏝ ᏰᎵ ᏯᎪᎵᏰᏗ ({error})
 #. window title in extracting archives (a download's log, the Archive password window)
 #. window title: 7-Zip (a program's name) must be installed
 #, machine
@@ -810,7 +830,7 @@
 #. a country's name (where a download's server is)
 #, machine
 	Canada	ᎧᎾᏓ
-#. button in the Batch download window; button in categories.rs; text in the Checksum window; button in a dialog box; button in extracting archives (a download's log, the Archive password window); button in the Find window; button in gallerydlg.rs; text in the Link grabber window; text in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in langpick.rs; button in the Options window; button in a download's progress window; text in remote.rs; button in the Scheduler window; button in the Add torrent window; button in the Download video window
+#. button in the Batch download window; button in categories.rs; text in the Checksum window; button in a dialog box; button in extracting archives (a download's log, the Archive password window); button in the Find window; button in gallerydlg.rs; text in the Link grabber window; text in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in langpick.rs; button in the Options window; button in a download's progress window; text in remote.rs; button in the Scheduler window; button in the Add torrent window; button in traypanel.rs; button in the Download video window
 #. button: stop downloading the update
 #, machine
 	Cancel	ᎠᎦᏘᎴᎢ
@@ -989,7 +1009,7 @@
 #. text in the Options window
 #, machine
 	Clock:	ᎢᏳᏟᎶᏛ:
-#. text in the Checksum window; text in the main window (menus, toolbar, Categories pane); button in crashui.rs; button in a dialog box; button in extension.rs; button in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in helpers.rs; button in the download list; button in the Options window; button in rssdlg.rs; button in torrentfiles.rs; text in standard windows
+#. text in archtest.rs; text in the Checksum window; text in the main window (menus, toolbar, Categories pane); button in crashui.rs; button in a dialog box; button in extension.rs; button in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in helpers.rs; button in the download list; button in the Options window; button in rssdlg.rs; button in torrentfiles.rs; text in traypanel.rs; text in standard windows
 #. both verbs: Verify = check the file now; Close = close the window
 #. tooltip of the × that closes the Categories pane
 #. verb: closes this window
@@ -1105,6 +1125,10 @@
 #. {name} = a file name (keep the braces as they are)
 #, machine
 	Couldn't extract {name}: {why}	ᎥᏝ ᎢᏗᎦᎴᏴᏔᏅᎯ {name}: {why}
+#. checkbox in the Add torrent window
+#. Add torrent: keep a multi-file torrent inside its own outer folder; untick to use Save to directly
+#, machine
+	Create a folder for this torrent	ᎠᎴᏅᏗ ᏗᎪᏪᎵ ᎯᎠ ᎤᏍᏓᎷᎩᏍᎩ
 #. window title in a dialog box
 #, machine
 	Create folder	ᏗᏓᏍᏆᏂᎪᏗᏍᏗ ᏗᎪᏢᏍᏗ
@@ -1148,6 +1172,18 @@
 #. adverb: every day (the other choice is once, on a date)
 #, machine
 	Daily	ᏂᎦᏓ ᎢᎦ
+#. text in the download list (sizes, speeds, status)
+#. a download's status: its archive's test (Options → Archives) found it damaged. One short word: the list's Status column is narrow
+#, machine
+	Damaged	ᎤᏲᏨᎯ
+#. window title in archtest.rs
+#. window title: an archive (zip, 7z, rar) that was downloaded is damaged
+#, machine
+	Damaged archive	ᎤᏲᏨᎯ ᏗᎪᏪᎵ
+#. text in the download list (sizes, speeds, status)
+#. a download's status, whole (the Status cell's tip): its archive's test found it damaged; "Redownload" is the right-click command
+#, machine
+	Damaged: its archive test found errors. Right-click → Redownload downloads it again	ᎤᏲᏨᎯ: ᏗᎪᏪᎵ ᏚᎪᎵᏯ ᎤᏲᎢᏳ ᎨᏒᎢ. ᎦᏙᎦ ᎦᏗᎨᏍᏗ → ᏔᎵᏁ ᏗᎪᏪᎵ ᏔᎵᏁ ᏗᎪᏪᎵᏍᎪᎢ
 #. text in the Options window
 #, machine
 	Date order:	ᎢᎦ ᏂᎬᎢ:
@@ -1158,7 +1194,7 @@
 #. a date's order: day first (30/10/2026)
 #, machine
 	Day, month, year	ᎢᎦ, ᎠᎴᏅᏙᏗ, ᏑᏕᏘᏴᏛ
-#. page title in the Options window
+#. page title in the Options window; text in the Options window
 #, machine
 	Debrid service accounts	Debrid ᏗᏂᏍᏕᎵᏍᎩ ᎠᏎᏍᏙᏗ
 #. text in the Scheduler window
@@ -1338,6 +1374,10 @@
 #. Add torrent, a checkbox: download the files from their start, to watch a video while it downloads
 #, machine
 	Download in order	ᎠᏓᎴᏂᏍᎬᎢ ᏗᎦᏁᏟᏴᏍᏗ
+#. text in the Link grabber window
+#. Link grabber, a link's status: the remedy from the failure's sentence, for a file whose checksum didn't match. The sentence is the cell's hover tip
+#, machine
+	Download it again	ᏔᎵᏁ ᏗᎪᏪᎵ
 #. button in a dialog box
 #, machine
 	Download Later	ᏗᏗᏍᎪᏗᏱ ᎣᏂ
@@ -1360,6 +1400,10 @@
 #. window title: the download button the extension shows over videos
 #, machine
 	Download panels	ᎠᏰᎵ ᏗᏓᏟᎶᏍᏗ ᏗᎦᏃᏍᏙᏗ
+#. window title in the Options window
+#. window title: Options → Downloads → Edit... (the progress window's settings)
+#, machine
+	Download progress dialog	ᏗᎪᏪᎵᏍᎬ ᏂᎦᎵᏍᏔᏅᎢ ᎦᏟᎶᏍᏗ
 #. text in rssdlg.rs
 #. RSS feeds window: the tab of the rules that add articles by themselves
 #, machine
@@ -1372,6 +1416,9 @@
 #. Options → Accounts: checkbox: links of the file hosts these services support are downloaded through the accounts
 #, machine
 	Download supported file-host links through these accounts	ᏗᏂᏍᏕᎵᏍᎩ ᏗᎪᏪᎶᏗ ᏗᎬᏔᏂᏓᏍᏗ ᏗᎪᏪᎶᏗ-ᏗᏂᏍᏕᎵᏍᎩ ᏗᏓᏚᎪᏗ
+#. what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
+#, machine
+	Download the links in the clipboard (Add batch download from clipboard)	ᏗᎪᏪᎵᏍᏗ ᏚᎾᏕᏃᏛ ᏗᎪᏪᎵ ᎦᏟᎶᏍᏗ ᏗᎪᏪᎵ (ᏗᎪᏪᎵᏍᏗ ᎤᏂᎪᏗᏗ ᏗᎪᏪᎵ ᎦᏟᎶᏍᏗ ᏗᎪᏪᎵ)
 #. text in a dialog box
 #. Download File Info: a check box, ticked when the download goes through the user's debrid account; {service} the service and the account, "Real-Debrid (labuser)". Unticked: downloaded directly
 #, machine
@@ -1422,16 +1469,29 @@
 #. text in the Download video window
 #. the trailing ... means it is still going on: keep it
 #, machine
+	Downloading and verifying Node.js (40 to 60 MB)...	ᏗᎪᏪᎵᏍᎬ ᎠᎴ ᏚᎪᎵᏯ Node.js (40 ᎢᏳᏟᎶᏛ 60 ᎢᏳᏟᎶᏛ)...
+#. text in the Download video window
+#. the trailing ... means it is still going on: keep it
+#, machine
 	Downloading and verifying yt-dlp...	ᎠᎾᏛᏗ ᎠᎴ ᎠᎾᏙᎴᎰᏍᎬ yt-dlp...
 #. text in helpers.rs
 #. Video helpers: MDM's own yt-dlp is being downloaded
 #. the trailing ... means it is still going on: keep it
 #, machine
 	Downloading MDM's own copy...	MDM ᎤᏩᏒ ᏚᏬᏪᎳᏅᎢ...
+#. text in archtest.rs
+#. in a download's log: after its archive test found damaged files, only their bytes are downloaded again from the same server; {size} like "1.20 MB"
+#. {size} = a file size such as "4.2 MB" (keep the braces as they are)
+#, machine
+	Downloading the damaged parts again ({size})	ᏔᎵᏁ ᏗᎪᏪᎵᏍᎬ ᎤᏲᏨᎯ ᎢᏗᎦᏅᎯᏓ ({size})
 #. text in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #. Check for updates, while Update now downloads; {percent} like "42%"
 #, machine
 	Downloading the update... {percent}	ᎠᏓᏁᏟᏴᏍᏗ ᏓᎩᎶᏔᏅ... {percent}
+#. text in helpers.rs
+#. Helpers: a newer version of a helper is being downloaded; {percent} = how far, a number
+#, machine
+	Downloading the update... {percent}%	ᏗᎪᏪᎵᏍᎬ ᎢᏤᎢᏳᏍᏗ... {percent}%
 #. text in helpers.rs
 #. {name} = yt-dlp, ffmpeg or Node.js; {n} of {total} = which helper of how many; {percent} = how far, e.g. 45%
 #. {name} = a file name; {n} = a number (keep the braces as they are)
@@ -1445,8 +1505,17 @@
 #. title of the window that sums up downloads added together (a playlist, a batch) once all are done
 #, machine
 	Downloads complete	ᏗᎦᎴᏴᏔᏅᎢ ᎤᏍᏆᏛᎯ
-#. text in the tray icon's menu
+#. text in win32.rs
+#. Windows' Settings → Default apps: what Mister Download Manager is
+#, machine
+	Downloads files, videos and torrents	ᏗᎪᏪᎵᏍᎪᎢ ᏗᎪᏪᎵ, ᏗᎧᏃᏗᏱ ᎠᎴ ᎤᏍᏓᎷᎩᏍᎩ
+#. message or event log entry in the main window
+#. the notice shown once, the first time a download comes from a browser's private (incognito) window: it stays in MDM's list like any other, after a restart too; where to turn that off. {options} = the Options window, {general} = its General tab, {checkbox} = the checkbox "Keep private-window downloads in the list"
+#, machine
+	Downloads from a browser's private window stay in MDM's list like any other, also after MDM restarts; their cookies are never saved. To keep them in memory only, untick {options} → {general} → {checkbox}.	ᏗᎪᏪᎵᏍᎬ ᏅᏓᏳᏓᎴᏅᎯ ᏗᎧᏃᏗᏱ ᎤᏕᎵᏛ ᏗᎪᏪᎵ ᎦᏟᎶᏍᏗ ᏕᎪᏪᎵᏍᎪᎢ MDM ᎤᎾᏓᏡᎬ ᎾᏍᎩᏯ ᏅᏩᏓᎴ, ᎠᎴ ᏔᎵᏁ MDM ᎤᎴᏅᎲᎢ; ᎤᎾᏤᎵ ᏗᎪᏪᎵ ᎥᏝ ᎢᎸᎯᏳ ᏱᏗᏍᏆᏂᎪᏗ. ᏗᏍᏆᏂᎪᏙᏗᏱ ᎤᎾᏅᏔᏅᎯ ᎤᏩᏒ, ᎤᏁᎳᎩ {options} → {general} → {checkbox}.
+#. text in the tray icon's menu; text in traypanel.rs
 #. tray menu: a submenu of the downloads now running; choosing one shows its progress window
+#. the notification-area icon's panel (#1365): its title, over the downloads now running (also the tray menu's submenu)
 #, machine
 	Downloads in progress	ᏂᎦᏛ downloads Ꭲ presently
 #. text in a dialog box
@@ -1468,6 +1537,16 @@
 #. tooltip of the handle in Download complete: drag it to drop the downloaded file somewhere
 #, machine
 	Drag the file into a folder or an app	ᏙᎾᏏᏔ ᎠᏰᎵ ᎢᏗᏢ ᏗᎪᏪᎵ ᏗᏟᏴᏍᏗᏱ ᎠᎴ ᎢᏗᏢ ᎢᏓᏟᏴᏍᏗᏱ
+#. message or event log entry in the main window
+#, machine
+	Dragged out of Download complete and moved to a place MDM couldn't learn	ᎤᎾᏓᏡᎬ ᏗᎪᏪᎵᏍᎬ ᎤᏍᏆᏛᎯ ᏅᏓᏳᏓᎴᏅᎯ ᎠᎴ ᏫᏚᏓᎴᏅᏔᏅᎯ ᎢᎸᎯᏢ MDM ᎥᏝ ᏰᎵ ᏱᎦᏙᎥᏍᎪᎢ
+#. message or event log entry in the main window
+#, machine
+	Dragged out of Download complete and moved to {folder}	ᎤᎾᏓᏡᎬ ᏗᎪᏪᎵᏍᎬ ᎤᏍᏆᏛᎯ ᏅᏓᏳᏓᎴᏅᎯ ᎠᎴ ᏫᏚᏓᎴᏅᏔᏅᎯ {folder}
+#. message or event log entry in the main window
+#. a download's note: its file was dragged out of the download list and moved somewhere MDM can't tell (a program took it, the Recycle Bin)
+#, machine
+	Dragged out of the list and moved to a place MDM couldn't learn	ᎤᎾᏓᏡᎬ ᏅᏓᏳᏓᎴᏅᎯ ᎠᎴ ᏫᏚᏓᎴᏅᏔᏅᎯ ᎢᎸᎯᏢ MDM ᎥᏝ ᏰᎵ ᏱᎦᏙᎥᏍᎪᎢ
 #. message or event log entry in the main window
 #. a download's note: its file was dragged out of the download list and moved to that folder
 #, machine
@@ -1775,6 +1854,10 @@
 #. verb: button that starts the search
 #, machine
 	Find	ᎤᎾᏙᎴᎰᎯᏍᏗ
+#. text in the Options window
+#. Options → Archives: button, shown once a 7-Zip program was chosen with "Use another program...": go back to the 7-Zip MDM finds on the computer by itself
+#, machine
+	Find 7-Zip automatically	ᎤᏩᏛᏗ 7-Zip ᎾᏍᎩᏯ ᎤᏩᏒ
 #. what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	Find a download	ᏗᏯᏛᎢᏍᏗ ᎤᏲᎢᏍᏗ
@@ -1909,6 +1992,14 @@
 #. where a download came from, in its log: a playlist or channel, by yt-dlp
 #, machine
 	from a playlist (yt-dlp)	ᏗᏟᎶᏍᏔᏅᎯ ᎢᎬᎾᏗ (yt-dlp)
+#. text in the download list (sizes, speeds, status)
+#. tooltip of the mark (a mask) before a download's status in the list: it came from a browser's private (incognito) window, and it is in memory only, gone from the list when MDM closes
+#, machine
+	From a private window: in memory only, gone from the list when MDM closes	ᏅᏓᏳᏓᎴᏅᎯ ᎤᏕᎵᏛ ᏗᎧᏃᏗᏱ: ᎤᎾᏅᏔᏅᎯ ᎤᏩᏒ, ᎤᎾᏓᏡᎬ ᏅᏓᏳᏓᎴᏅᎯ ᎢᏳᏃ MDM ᎤᏍᏚᎢᏍᏗ
+#. text in the download list (sizes, speeds, status)
+#. tooltip of the mark (a mask) before a download's status in the list: it came from a browser's private (incognito) window, and MDM's list keeps it after a restart (Options → General → Keep private-window downloads in the list)
+#, machine
+	From a private window: kept in the list	ᏅᏓᏳᏓᎴᏅᎯ ᎤᏕᎵᏛ ᏗᎧᏃᏗᏱ: ᎤᎾᏓᏡᎬ ᏕᎪᏪᎵᏍᎪᎢ
 #. message or event log entry in the main window
 #, machine
 	from a torrent file	ᏗᏓᎴᏂᏍᏗ ᏗᏓᎴᏂᏍᏗ
@@ -2236,6 +2327,10 @@
 #. link in the browser extension's window: the tutorial that adds it without the browser's store
 #, machine
 	Install it by hand	ᎤᏩᏒᎢ ᏗᎧᏃᎩᏍᏗ
+#. text in the Download video window
+#. button in Download video: download and install Node.js, the JavaScript runtime YouTube needs (Node.js is a program's name)
+#, machine
+	Install Node.js	ᎤᎵᎪᏔᏅᎢ Node.js
 #. text in unix.rs
 #. Linux, after a missing library's name, on a distribution MDM doesn't know
 #, machine
@@ -2363,6 +2458,10 @@
 #. a country's name (where a download's server is)
 #, machine
 	Japan	ᏣᏩᏂᏏ
+#. text in helpers.rs
+#. Video helpers: the row of the JavaScript runtime (Node.js, Deno...) yt-dlp needs for YouTube's videos
+#, machine
+	JavaScript runtime (for YouTube)	JavaScript ᏂᎦᎵᏍᏔᏅᎢ (YouTube ᎢᏳᏍᏗ)
 #. text in countries.rs
 #. a country's name (where a download's server is)
 #, machine
@@ -2594,6 +2693,11 @@
 #. why Download Now is greyed: the page address was changed after the look-up
 #, machine
 	Look up the new address first	ᎢᎬᏱᏱ ᎢᏗᎪᏩᏛᏗ ᎢᏤ ᏗᎦᏛᏗ
+#. text in helpers.rs
+#. Video helpers: MDM is asking the JavaScript runtimes on the computer (Node.js, Deno...) for their versions, to see which one yt-dlp can use
+#. the trailing ... means it is still going on: keep it
+#, machine
+	Looking for a JavaScript runtime on this computer...	ᎤᏲᎬᎢ JavaScript ᏂᎦᎵᏍᏔᏅᎢ ᎯᎠ ᎢᏗᎦᏅᎯᏓ...
 #. text in the Add torrent window
 #. while a magnet link's file list is fetched, before any peer is found
 #. the trailing ... means it is still going on: keep it
@@ -2770,6 +2874,10 @@
 #. Video helpers: MDM can't download this helper on this Windows (ffmpeg on 32-bit Windows); "Use another program" is the button below
 #, machine
 	MDM has no copy for this system: install it, or use another program	MDM ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ: ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ, ᎠᎴ ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ.
+#. text in helpers.rs
+#. Video helpers: MDM can't download Node.js on this system (an unusual processor); Node.js and Deno are program names; "Use another program" is the button below
+#, machine
+	MDM has no copy for this system: install Node.js or Deno, or use another program	MDM ᎥᏝ ᏱᏚᎭ ᏗᎪᏪᎵ ᎯᎠ ᎢᏗᎦᏅᎯᏓ: ᎤᎵᎪᏔᏅᎢ Node.js ᎠᎴ Deno, ᎠᎴ ᎤᎵᎪᏔᏅᎢ ᏅᏩᏓᎴ ᏗᎪᏪᎵ
 #. text in remote.rs
 #. remote control page (on a phone): no pairing code is shown in MDM; "Pair a device" is MDM's button
 #, machine
@@ -3117,6 +3225,10 @@
 #. message or event log entry in the main window
 #, machine
 	No download links were found in the clipboard. Copy a text with http, https, ftp or magnet links in it, and try again.	ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ. ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ http, https, ftp ᎠᎴ magnet ᎾᏍᎩ ᎢᏗᏢ ᎢᏤᎳᏍᏓ.
+#. text in traypanel.rs
+#. the notification-area icon's panel (#1365) when no download is running
+#, machine
+	No downloads are running	ᎥᏝ ᏗᎪᏪᎵᏍᎬ ᏱᏚᎾᏓᎴᏅᏔᏅ
 #. message or event log entry in the main window
 #. title in the empty download list (this category or queue has no downloads)
 #, machine
@@ -3194,6 +3306,10 @@
 #. message or event log entry in the main window
 #, machine
 	No web addresses were found in {file}.	ᎥᏝ ᏗᎪᏪᎵ ᏗᏟᏍᏔᏅᎢ ᎯᎠ ᏗᎪᏪᎵ ᏗᏟᏍᏔᏅᎢ {file}.
+#. text in helpers.rs
+#. helper name and what it does (Node.js and YouTube are names)
+#, machine
+	Node.js: unlocks YouTube's qualities	Node.js: ᏕᎦᏁᏍᎪᎢ YouTube ᎤᏍᏆᏂᎪᏗ
 #. text in the Options window; text in the Download video window
 #. in the Subtitles list of Download video: download no subtitles
 #, machine
@@ -3272,6 +3388,10 @@
 #. Options → Accounts: the service doesn't take this file host (shouldn't happen when signing in)
 #, machine
 	not supported by this service	ᎯᎠ ᏗᏂᏍᏕᎵᏍᎩ ᎥᏝ ᎯᎠ ᏗᎪᏪᎶᏗ ᏗᏂᏍᏕᎵᏍᎩ ᏱᏓᏂᏍᏕᎵᏍᎪᎢ
+#. text in archtest.rs
+#. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
+#, machine
+	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	ᎥᏝ ᏚᎪᎵᏯ: ᎤᏟ ᎡᏉᎾᎢ {limit} (Options → Archives). ᎦᏙᎦ ᎦᏗᎨᏍᏗ → ᏚᎪᎵᏯ ᏗᎪᏪᎵ ᏚᎪᎵᏯ
 #. text in the Options window
 #, machine
 	Not used: file parts are written next to the file	ᎥᏝ ᏗᎪᏪᎵ ᏗᏟᏍᏔᏅᎢ: ᏗᎪᏪᎵ ᏗᏟᏍᏔᏅᎢ ᎯᎠ ᏗᎪᏪᎵ ᏗᏟᏍᏔᏅᎢ
@@ -3404,6 +3524,10 @@
 #. {n} = a number (keep the braces as they are)
 #, machine
 	Only the first {n} videos are listed.	ᎤᏓᎷᎸ {n} ᏗᏟᎶᏍᏔᏅᎯ ᏕᎭᏢᏍᎬᎢ.
+#. message or event log entry in the main window
+#. event log: a torrent through a debrid account gets only the files ticked in Add torrent; {files} how many ("3")
+#, machine
+	Only the {files} file(s) ticked in Add torrent	ᎤᏩᏒ {files} ᏗᎪᏪᎵ ᏗᎪᏪᎵᏍᏗ ᎤᏍᏓᎷᎩᏍᎩ
 #. checkbox in a dialog box
 #, machine
 	Only while I'm using the computer	ᎠᏴᏉ ᎢᏗᏙᎯ
@@ -3428,7 +3552,8 @@
 #. checkbox in the Add torrent window
 #, machine
 	Open magnet links and .torrent files with Mister Download Manager	ᎤᏍᏚᎢᏓ magnet links ᎠᎴ .torrent ᏗᎪᏪᎵ Mister Download Manager ᎢᏗᏙᎯ
-#. text in the tray icon's menu
+#. text in the tray icon's menu; text in traypanel.rs
+#. the notification-area icon's panel (#1365): its button that opens the main window (also the tray menu's first item)
 #, machine
 	Open Mister Download Manager	ᎤᏍᏚᎢᏓ Mister Download Manager
 #. text in extension.rs
@@ -3658,6 +3783,10 @@
 #. tooltip of the greyed Preview button in Download File Info
 #, machine
 	Preview isn't available yet	ᎢᎬᏱᏱ ᏗᎪᏩᏛᏗ ᏂᎨᏒᎾ
+#. message or event log entry in the main window
+#. title of the notice shown once, the first time a download comes from a browser's private (incognito) window
+#, machine
+	Private-window downloads	ᎤᏕᎵᏛ ᏗᎧᏃᏗᏱ ᏗᎪᏪᎵᏍᎬ
 #. text in the Download video window
 #. a private-window video's authentication failure: only cookies supplied by that private window may be used, even after restarting MDM
 #, machine
@@ -3781,10 +3910,18 @@
 #. the trailing ... means it is still going on: keep it
 #, machine
 	Recording...	ᏗᎪᏪᎵᏍᏗ...
-#. message or event log entry in the main window
+#. message or event log entry in the main window; text in archtest.rs
 #. window title, verb: download the file again from the start
 #, machine
 	Redownload	ᏗᏓᏁᏟᏴᏗ
+#. text in archtest.rs
+#. in the "Damaged archive" window, under what was found; "Redownload" is the button beside
+#, machine
+	Redownload downloads every volume again from the start.	ᏔᎵᏁ ᏗᎪᏪᎵᏍᏗ ᏕᎪᏪᎵᏍᎪᎢ ᏂᎦᏛ ᏗᎪᏪᎵ ᏔᎵᏁ ᎤᎴᏅᎲᎢ.
+#. text in archtest.rs
+#. in the "Damaged archive" window, under what was found; "Redownload" is the button beside
+#, machine
+	Redownload downloads it again from the start.	ᏔᎵᏁ ᏗᎪᏪᎵᏍᏗ ᏕᎪᏪᎵᏍᎪᎢ ᏔᎵᏁ ᎤᎴᏅᎲᎢ.
 #. text in a download's Properties window
 #, machine
 	Referer:	ᏗᏓᏁᏟᏴᏗ:
@@ -4188,6 +4325,10 @@
 #. checkbox in the Options window
 #, machine
 	Show download progress dialog when a download starts	ᎬᏂᎨᏒᎢ ᏗᎦᏟᏏᏍᏗ ᎦᎴᏴᏔᏅᎯ ᎦᎴᏴᏔᏅᎯ ᎢᏳᏃ ᏗᎦᏟᏏᏍᏗ ᎤᎾᎴᏅᎲᏍᎬᎢ
+#. text in the Options window
+#. checkbox: a click on MDM's icon in the notification area (system tray) shows a small panel over it with the downloads now running, their progress, Pause and Cancel; unticked, the click shows or hides the main window
+#, machine
+	Show downloads when the notification area icon is clicked	ᎬᏂᎨᏒ ᎢᎬᏁᏗ ᏗᎪᏪᎵᏍᎬ ᎢᏳᏃ ᏗᎪᏪᎵ ᎦᏟᎶᏍᏗ ᎦᏗᎨᏍᏗ
 #. button in a dialog box
 #. button: shows these downloads in MDM's list, selected
 #, machine
@@ -4643,6 +4784,13 @@
 #. button: asks the chosen DNS for an address, to see it works
 #, machine
 	Test	ᎠᎪᎵᏰᏗ
+#. message or event log entry in the main window
+#, machine
+	Test archive	ᏚᎪᎵᏯ ᏗᎪᏪᎵ
+#. text in the Options window
+#. Options → Archives check box with a number box in it: {gb} is the box (a size in gigabytes, 4 at first); the words before it are the check box's caption, those after it follow the box, on one line. A test reads the archive back whole and checks it before its download counts as done
+#, machine
+	Test archives when their download completes, up to {gb} GB	ᏚᎪᎵᏯ ᏗᎪᏪᎵ ᎢᏳᏃ ᎤᏍᏆᏛᎯ, ᎤᎵᎪᏔᏅᎢ {gb} GB
 #. window title in the Options window
 #. window title: Options → General → Test browser integration
 #, machine
@@ -4651,6 +4799,19 @@
 #. the trailing ... means it opens a window: keep it
 #, machine
 	Test browser integration...	ᏗᏓᏂᏴᏗ ᏗᏕᎬᏔᏅᎢ ᏗᏓᏂᏴᏗ ᏗᏕᎬᏔᏅᎢ...
+#. text in archtest.rs
+#. in a download's log: the archive's damaged parts were downloaded again, and its test now finds no error
+#, machine
+	Tested again: the archive has no errors now	ᏔᎵᏁ ᏚᎪᎵᏯ: ᏗᎪᏪᎵ ᎥᏝ ᎤᏲᎢᏳ ᏱᏚᎭ
+#. text in archtest.rs; text in the download list (sizes, speeds, status)
+#. in a download's log: its archive is being tested (read back and checked) before the download counts as done
+#. the trailing ... means it is still going on: keep it
+#, machine
+	Testing the archive...	ᏚᎪᎵᏯ ᏗᎪᏪᎵ...
+#. text in the download list (sizes, speeds, status)
+#. a download's status while its archive (zip, 7z, rar) is read back and checked before the download counts as done; {percent} how far, e.g. "45%"
+#, machine
+	Testing the archive... ({percent})	ᏚᎪᎵᏯ ᏗᎪᏪᎵ... ({percent})
 #. text in the Scheduler window
 #. Thursday, as short as a calendar's column head (two letters in English)
 #, machine
@@ -4663,6 +4824,10 @@
 #. why Batch download's OK is greyed
 #, machine
 	That is more than 100,000 files: make the range smaller	ᎾᏍᎩ 100,000 ᏗᏓᏟᎶᏍᏗ ᎤᏟᎯ: ᎢᎦᎢᏍᏗ ᎢᏗᎪᏩᏛᏗ
+#. text in the Options window
+#. Options → Archives, in red: the program chosen with "Use another program..." isn't 7-Zip's command line program (an archiver's window was picked instead); 7z.exe is that program's file name
+#, machine
+	That isn't 7-Zip's command line program (7z.exe).	ᎾᏍᎩ ᎥᏝ 7-Zip ᎤᏤᎵ ᏗᎪᏪᎵ ᏱᎩ (7z.exe).
 #. text in torrent downloads
 #. an error: the copy of the .torrent file the app keeps is missing
 #, machine
@@ -4676,6 +4841,14 @@
 #. text in extracting archives (a download's log, the Archive password window)
 #, machine
 	The archive could not be moved to the Trash: it was kept	ᎤᏓᎨᏛ ᏗᎪᏢᏒᎢ ᎥᏝ ᏰᎵ ᎤᎾᏗᏒᎢ ᏗᎦᎴᏴᏔᏅᎢ ᏗᎦᎶᏗᏱ: ᎤᏕᎳᎰᏒᎢ
+#. text in archtest.rs
+#. in a download's log: the archive's own structure doesn't read back (its headers, its end), or it isn't the archive its name says
+#, machine
+	The archive test failed: it is damaged, or not the archive its name says	ᏗᎪᏪᎵ ᏚᎪᎵᏯ ᎤᏲᏨᎯ: ᎤᏲᏨᎯ, ᎠᎴ ᎥᏝ ᏗᎪᏪᎵ ᏱᎩ ᎤᏤᎵ ᏚᏙᎥ ᎢᏳᏍᏗ
+#. text in archtest.rs
+#. in a download's log: the archive was read back whole and checked
+#, machine
+	The archive test found no errors	ᏗᎪᏪᎵ ᏚᎪᎵᏯ ᎥᏝ ᎤᏲᎢᏳ ᏱᏚᏩᏛᎮᎢ
 #. text in extracting archives (a download's log, the Archive password window)
 #. in a download's log: the downloaded archive, after it was extracted
 #, machine
@@ -4763,6 +4936,11 @@
 #. text in errors.rs
 #, machine
 	the connection was lost while receiving data	ᎢᎬᎾᏕᏏᏗ ᎤᎵᏓᏍᏔᏅ ᎢᎬᎾᏕᏏᏗ ᎢᎬᎾᏕᏏᏗ ᎢᎬᎾᏕᏏᏗ
+#. text in archtest.rs
+#. in a download's log: the bytes of the archive's damaged files couldn't be downloaded again; {error} why
+#. {error} = an error message (keep the braces as they are)
+#, machine
+	The damaged parts couldn't be downloaded again: {error}	ᎤᏲᏨᎯ ᎢᏗᎦᏅᎯᏓ ᎥᏝ ᏰᎵ ᏱᏗᎪᏪᎵᏍᏗ ᏔᎵᏁ: {error}
 #. text in torrent downloads
 #. files kept appearing while the user was confirming a torrent start; stop rather than repeat questions indefinitely
 #, machine
@@ -5293,6 +5471,9 @@
 #. {site} = a web site's name such as "example.com" (keep the braces as they are)
 #, machine
 	this {site} link is a web page, not the file: open it in your browser and download from there	ᎯᎠ {site} ᏗᎪᏪᎵ ᏗᎪᏪᎵ ᏗᎪᏪᎵ, ᎥᏝ ᏗᎪᏪᎵ: ᎤᎵᏍᏚᎢᏒᎢ ᏗᏣᏃᏟᏍᏙᏗ ᎠᎴ ᏗᎪᏪᎵ ᎾᎿ.
+#. text in helpers.rs
+#, machine
+	Three free helpers make it work. Get them now, and saving a video is one click away when you find one.	ᏦᎢ ᎢᏯᏓᏍᏕᎵᏍᎩ ᎾᏍᎩ ᎢᏳᎵᏍᏙᏗᏱ. ད་ལྟ་ ᏕᎭᏩᏛ, ᎠᎴ ᏗᎪᏪᎶᏗ ᏌᏉᏉ ᎦᎸᏛ ᎢᏴᏛ ᎨᏎᏍᏗ ᎢᏳᏃ ᎯᏩᏛᎲᏍᎨᏍᏗ.
 #. text in whereis.rs
 #. where a download's server is, when a proxy carries it (the proxy's place not known)
 #, machine
@@ -5478,6 +5659,10 @@
 #. text in helpers.rs
 #, machine
 	Two free helpers make it work. Get them now, and saving a video is one click away when you find one.	ᏔᎵ ᏂᏚᎾᏓᏁᎸᎾ ᏓᏓᏁᏟᏴᏍᎪᎢ. ᎪᎯ ᎭᏓᏂᏱᏍᎩ, ᎠᎴ ᏗᏓᏂᏱᏍᎩ ᏗᏟᎶᏍᏔᏅᎯ ᏌᏉ ᎭᏓᏂᏱᏍᎩ ᎢᏳᏃ ᎭᏩᏛᏍᏗ.
+#. label in the Options window; text in the Options window
+#. Options → Proxy / Socks → Manual: label before the kind of proxy (HTTP, HTTPS, SOCKS5, SOCKS4)
+#, machine
+	Type	ᎢᏯᏓᏛᏁᎯ
 #. text in rssdlg.rs
 #. RSS feeds window: shown when there are no feeds yet
 #, machine
@@ -5682,7 +5867,7 @@
 #. Options → Add an account: label before the field for the user name at the debrid service
 #, machine
 	User name:	ᏴᏫ ᏚᏙᎥ:
-#. page title in the Options window
+#. page title in the Options window; text in the Options window
 #, machine
 	User names and passwords for servers/sites	ᎬᏔᏅᎢ ᏚᏙᎥᎢ ᎠᎴ ᏗᏍᎦᎶᏗ ᏗᏙᎳᏤᏗ/ᏗᏙᎳᏤᏗ
 #. text in the Options window
@@ -5983,6 +6168,9 @@
 #. Video helpers: {path} = the system's yt-dlp, ffmpeg or gallery-dl
 #, machine
 	Your system's: {path}	ᏂᎯ ᎢᎬᎾᎯᏍᏗᏍᎩ: {path}
+#. text in helpers.rs
+#, machine
+	YouTube makes yt-dlp run a piece of JavaScript before it lists its videos, and this computer has nothing to run it with. Node.js does.	YouTube ᎾᏍᎩ yt-dlp ᎤᎾᎴᏅᏗᏱ ᏌᏉ ᎢᏯᏓᏛᏁᎯ JavaScript ᎢᎬᏱ ᏂᎬᏁᎲᎾ ᏂᎦᏛ ᏗᎪᏪᎶᏗ, ᎠᎴ ᎯᎠ ᎢᏗᏓᏛᏁᎯ ᎥᏝ ᎪᎱᏍᏗ ᏱᏓᏓᏛᏁ. Node.js ᎾᏍᎩ ᎢᏯᏛᏁᎯ.
 #. text in the Download video window
 #. in Download video and the browser's video menu: yt-dlp had no JavaScript runtime, so YouTube listed only some qualities (often only the sound); Node.js and Deno are program names
 #, machine
@@ -6097,7 +6285,7 @@
 #. Options → Remote → Pair a device: done; {device} = the name it was given
 #, machine
 	{device} is paired. It can control MDM now.	{device} ᎤᎾᏓᏟᏍᏔᏅ. ᎢᏗᏢᏗᏍᏗ MDM ᎪᎯ ᎨᏒ.
-#. text in remote.rs
+#. text in remote.rs; text in traypanel.rs
 #. remote control page (on a phone): progress; {done} and {size} are sizes ("1.2 MB of 7.5 MB")
 #. {size} = a file size such as "4.2 MB" (keep the braces as they are)
 #, machine
@@ -6230,6 +6418,16 @@
 #. {name} = a file name (keep the braces as they are)
 #, machine
 	{name} is being downloaded already: try again in a moment	{name} ᎿᏉ ᏕᎦᏁᏟᏴᏍᎪᎢ: ᏔᎵᏁ ᎭᏢᎾ
+#. text in archtest.rs
+#. in the "Damaged archive" window: {name} is the archive's file name
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	{name} is damaged: its test found errors in it.	{name} ᎤᏲᏨᎯ: ᎾᏍᎩ ᎤᎾᏕᎶᏆᎡᎸ ᎤᎾᏙᎴᎰᏒ ᎤᏙᏒᎢ.
+#. text in archtest.rs
+#. in the "Damaged archive" window: {name} is the archive's first volume's file name
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	{name} is damaged: its test found errors in one of its volumes.	{name} ᎤᏲᏨᎯ: ᎾᏍᎩ ᎤᎾᏕᎶᏆᎡᎸ ᎤᎾᏙᎴᎰᏒ ᎤᏙᏒᎢ ᏌᏉ ᎾᏍᎩ ᎤᎾᏕᎶᏆᎡᎸᎢ.
 #. text in extracting archives (a download's log, the Archive password window)
 #. in Archive password: {name} is the archive's file name
 #. {name} = a file name (keep the braces as they are)
@@ -6295,6 +6493,22 @@
 #. {rate} = a speed such as "1.2 MB/sec" (keep the braces as they are)
 #, machine
 	{rate} (limit: {limit})	{rate} (ᏂᎦᏗᏳ ᎢᏳᎢ: {limit})
+#. text in helpers.rs
+#. Video helpers: the Deno an earlier version of MDM installed, still used until MDM's own Node.js replaces it (by the next update, or Use MDM's own copy); {runtime} = "Deno" and its version
+#, machine
+	{runtime}, MDM's earlier copy: Node.js takes its place at the next update	{runtime}, MDM ᎤᏪᏘ ᎢᏯᏓᏛᏁᎯ: Node.js ᎾᏍᎩ ᎤᎾᏓᏁᏟᏴᏍᎨᏍᏗ ᎢᎦᏓᏛᏁᎯ ᎢᎬᏱ ᎢᎦᏓᏛᏁᎯ.
+#. text in helpers.rs
+#. Video helpers: MDM's own Node.js is the JavaScript runtime; {runtime} = "Node.js" and its version
+#, machine
+	{runtime}, Mister Download Manager's own copy	{runtime}, Mister Download Manager ᎤᏩᏒ ᎢᏯᏓᏛᏁᎯ
+#. text in helpers.rs
+#. Video helpers: the JavaScript runtime the person chose; {runtime} = its name and version ("Node.js 24.11.0"), {path} = where it is
+#, machine
+	{runtime}, your own program: {path}	{runtime}, ᏂᎯ ᎢᏯᏓᏛᏁᎯ: {path}
+#. text in helpers.rs
+#. Video helpers: the computer's own JavaScript runtime, used as it is (MDM needn't download one); {runtime} = its name and version ("Node.js 24.11.0", "Deno 2.5.6"), {path} = where it is
+#, machine
+	{runtime}, your system's, nothing to download: {path}	{runtime}, ᏂᎯ ᎢᏯᏓᏛᏁᎯ, ᎥᏝ ᎪᎱᏍᏗ ᏱᏓᏓᏛᏁ: {path}
 #. text in errors.rs
 #. a debrid service's error: too many requests; MDM waits and retries
 #, machine
@@ -6309,6 +6523,10 @@
 #. text in errors.rs
 #, machine
 	{service} can't reach this file host right now; MDM will try again later	{service} ᎥᏝ ᏰᎵ ᎯᎠ ᏗᎪᏪᎵ ᏗᎦᎾᏢᏗ ᏫᎦᎷᎩ ᏰᎵ ᏱᎩ ᎪᎯ; MDM ᎣᏂ ᏙᏓᏳᎪᎵᏰᏏ.
+#. text in errors.rs
+#. a torrent through a debrid service: a file ticked in Add torrent isn't among the files the service has, so nothing was downloaded (rather than every file); {service} its name, {file} the file's path in the torrent
+#, machine
+	{service} doesn't list {file}, chosen in Add torrent: nothing was downloaded. Add the torrent again with all its files, or without this one	{service} ᎥᏝ ᏱᏓᏓᏛᏁ {file}, ᎾᏍᎩ ᎤᎾᏑᏰᏒ ᎢᏯᏓᏛᏁᎯ: ᎥᏝ ᎪᎱᏍᏗ ᏱᏓᏓᏛᏁ. ᎢᏯᏓᏛᏁᎯ ᎢᎬᏱ ᎢᏯᏓᏛᏁᎯ ᏂᎦᏛ ᎾᏍᎩ ᎢᏯᏓᏛᏁᎯ, ᎠᎴ ᎥᏝ ᎯᎠ ᎢᏯᏓᏛᏁᎯ.
 #. text in errors.rs
 #. a debrid service's error: it isn't answering
 #, machine
@@ -6352,6 +6570,11 @@
 #. a debrid service's error in its own words (English); {service} its name
 #, machine
 	{service}: {message}	{service}: {message}
+#. text in errors.rs
+#. a download's error: a video site kept answering MDM's request for the file with its download page again; {site} = the site's name (LuluStream)
+#. {site} = a web site's name such as "example.com" (keep the braces as they are)
+#, machine
+	{site} didn't give the file this time: try again in a moment	{site} ᎥᏝ ᏱᏓᏓᏛᏁ ᎯᎠ ᎢᏯᏓᏛᏁᎯ: ᎢᎬᏱ ᎢᏯᏓᏛᏁᎯ ᎢᎦᏓᏛᏁᎯ.
 #. text in a download's Properties window
 #. {size} = a file size such as "4.2 MB"; {bytes} = a number of bytes (keep the braces as they are)
 #, machine
@@ -7471,6 +7694,11 @@ menu	&Undo	ᏔᎵᏁ &ᏂᎦᎵᏍᏔᏅᏗ
 #, machine
 menu	&Video downloads	&ᏗᏟᎶᏍᏔᏅ ᏗᎦᏁᏟᏴᏗ
 #. menu command in the main window
+#. View → Window system: Wayland's own windows (the name of a Linux display system, usually kept as is)
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+#, machine
+menu	&Wayland	&ᏩᎢᎴᏂᏗ
+#. menu command in the main window
 #. View menu: submenu choosing the window system MDM's windows use on Linux (X11 through XWayland, or Wayland)
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 #, machine
@@ -7911,6 +8139,10 @@ menu	Te&xt	&ᏗᎪᏪᎵ
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 #, machine
 menu	Tell a &friend	Ꭿ&ᎵᏥᏙᏅᏗ ᎢᎦᎵᎢ
+#. menu command in the main window
+#. verb: read the downloaded archive (zip, 7z, rar) back and check that none of its files is damaged
+#, machine
+menu	Test archive	ᏕᎭᏕᎶᏆᎡᎸ ᎢᏯᏓᏛᏁᎯ
 #. menu command in the main window
 #. View → Draw with: a greyed note under "… didn't start here"; why: the graphics card stopped working twice (a driver update or reset)
 #, machine

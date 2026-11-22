@@ -670,6 +670,10 @@ These ship in the next version.
   another program...** takes any other 7-Zip command line program (a portable copy), checked
   before it is used
   ([#1525](https://github.com/anefzaoui/misterdownloadmanager/issues/1525))
+- ✅ Archives tested when their download completes (ZIP, 7z, RAR, split ones too, up to a size in
+  **Options → Archives**; right-click → **Test archive** for any): a damaged one says so and is
+  offered for Redownload, and a ZIP's damaged files are downloaded again from the same version of
+  the file ([#1661](https://github.com/anefzaoui/misterdownloadmanager/issues/1661))
 - ✅ The proxy reaches yt-dlp: Options' automatic configuration script is asked about the
   video's page for every yt-dlp run, "Use system settings" follows Windows' setup script (a
   proxy program's PAC mode), and a manual proxy chosen with no protocol ticked gets http and
