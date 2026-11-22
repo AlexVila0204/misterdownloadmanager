@@ -962,6 +962,12 @@ fn data_left(x: f32, right: f32) -> f32 {
 /// `s` broken into the lines it shows in `room` px: at its own line breaks, and where a line is
 /// too long, at spaces, or between any two characters in scripts written without spaces.
 fn wrap_lines(p: &Painter, s: &str, room: f32) -> Vec<String> {
+    wrap_lines_font(p, tahoma(), s, room)
+}
+
+/// [`wrap_lines`] in any font (a bold name on several lines: the preview pane's).
+pub fn wrap_lines_font(p: &Painter, font: FontId, s: &str, room: f32) -> Vec<String> {
+    let text_width = |p: &Painter, t: &str| text_width_font(p, font.clone(), t);
     let mut lines: Vec<String> = Vec::new();
     for given in s.split('\n') {
         // A Windows line end (a report written there) breaks the line too.
