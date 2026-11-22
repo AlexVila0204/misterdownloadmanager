@@ -65,11 +65,6 @@
 #, machine
 @plural	There is {n} more download waiting. Cancel it too?|There are {n} more downloads waiting. Cancel them too?	ᎠᏏᏴᏫ {n} ᎨᏒᎢ ᎠᎦᏘᏴᎢ. ᎾᏍᏉ ᎾᏍᎩᏍᎪ ᎠᏲᏍᏗᏍᎪᎢ?|ᎠᏂᏏᏴᏫ {n} ᎨᏒᎢ ᎠᏂᎦᏘᏴᎢ. ᎾᏍᏉ ᎾᏍᎩᏍᎪ ᎠᏲᏍᏗᏍᎪᎢ?
 #. count in a dialog box
-#. under "Also delete the files from disk", while it is ticked: how many of the downloads being deleted are finished, whose complete files are deleted from the disk too
-#. {n} = a number (keep the braces as they are)
-#, machine
-@plural	This also deletes {n} finished file.|This also deletes {n} finished files.	འདི་ {n} ᎤᏍᏆᏛᎯ ᏗᎪᏪᎵ ᎾᏍᏉ ᎦᎸᏙᏗ.|འདི་ {n} ᎤᏍᏆᏛᎯ ᏗᎪᏪᎵ ᎾᏍᏉ ᎦᎸᏙᏗ.
-#. count in a dialog box
 #. under the first failed downloads in the summary of a group of downloads: {n} more failed (Show in list shows them all)
 #. {n} = a number (keep the braces as they are)
 #, machine
@@ -5471,9 +5466,6 @@
 #. {site} = a web site's name such as "example.com" (keep the braces as they are)
 #, machine
 	this {site} link is a web page, not the file: open it in your browser and download from there	ᎯᎠ {site} ᏗᎪᏪᎵ ᏗᎪᏪᎵ ᏗᎪᏪᎵ, ᎥᏝ ᏗᎪᏪᎵ: ᎤᎵᏍᏚᎢᏒᎢ ᏗᏣᏃᏟᏍᏙᏗ ᎠᎴ ᏗᎪᏪᎵ ᎾᎿ.
-#. text in helpers.rs
-#, machine
-	Three free helpers make it work. Get them now, and saving a video is one click away when you find one.	ᏦᎢ ᎢᏯᏓᏍᏕᎵᏍᎩ ᎾᏍᎩ ᎢᏳᎵᏍᏙᏗᏱ. ད་ལྟ་ ᏕᎭᏩᏛ, ᎠᎴ ᏗᎪᏪᎶᏗ ᏌᏉᏉ ᎦᎸᏛ ᎢᏴᏛ ᎨᏎᏍᏗ ᎢᏳᏃ ᎯᏩᏛᎲᏍᎨᏍᏗ.
 #. text in whereis.rs
 #. where a download's server is, when a proxy carries it (the proxy's place not known)
 #, machine
