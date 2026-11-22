@@ -74,7 +74,7 @@ async function native(message, ms = HOST_WAIT) {
       await noteStatus(older(reply.version, VERSION) ? "update-app" : null, reply.version);
       // The answer to `rules` also says whether the app looks videos up for the button.
       await noteLookup(reply.videoLookup === true);
-    } else if (reply.ok || reply.why === "options" || reply.why === "spent") await noteStatus(null);
+    } else if (reply.ok || reply.why === "options") await noteStatus(null);
     else if (reply.why && reply.why !== "refused") await noteStatus(reply.why);
     return reply;
   } catch (e) {

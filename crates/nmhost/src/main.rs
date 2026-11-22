@@ -1043,7 +1043,8 @@ fn delivered(cmd: &mdm_ipc::Command) -> Reply {
             log_line(
                 "browser integration: a browser keeps a download its address no longer gives MDM",
             );
-            Reply::failed("spent", "the address no longer gives the file")
+            // `refused`: what every extension, older ones too, takes for the browser's own.
+            Reply::failed("refused", "the address no longer gives the file")
         }
         Err(Undelivered::Refused(e)) if e.starts_with("too-large") => Reply::failed("too-large", e),
         Err(Undelivered::Refused(e)) => Reply::failed("refused", e),
