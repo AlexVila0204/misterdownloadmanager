@@ -329,6 +329,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	ইয়াৰ এটা ভলিউম হেৰাইছে
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	ইয়াৰ এটা ভলিউম এতিয়াও নাই
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	About Mister Download Manager	Mister Download Manager ৰ বিষয়ে
@@ -3534,6 +3538,11 @@
 #, machine
 	not supported by this service	এই সেৱা দ্বাৰা সমৰ্থিত নহয়
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	এতিয়াও পৰীক্ষা কৰা হোৱা নাই: {name} সম্পূৰ্ণ হোৱা নাই ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	পৰীক্ষা কৰা হোৱা নাই: ই {limit}তকৈ ডাঙৰ (বিকল্পসমূহ → আৰ্কাইভ)। ৰাইট-ক্লিক → আৰ্কাইভ পৰীক্ষা কৰক
@@ -4630,6 +4639,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	কিছুমান
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	ইয়াৰ কিছুমান ভলিউম এতিয়াও ডাউনলোড হৈ আছে
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	টৰেণ্টৰ কিছুমান ফাইল ইতিমধ্যে এই ফোল্ডাৰত আছে:
@@ -6107,6 +6120,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	ভাইৰাছ পৰীক্ষাৰ ছেটিংছ
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	ভলিউম {n} এতিয়াও নাই
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

@@ -329,6 +329,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	huknin mana kanchu
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	huknin khipu manaraq uraykachisqachu
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	About Mister Download Manager	Mister Download Managermanta
@@ -3539,6 +3543,11 @@
 #, machine
 	not supported by this service	kay llamk'ayqa manan yanapanchu
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	Manaraq qhawasqa: {name} mana hunt'asqachu ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	Mana qhawasqa: {limit}manta aswan hatun (Akllanakuna → Khipukuna). Paña ñit'iy → Khiputa qhaway qhawachinqa
@@ -4635,6 +4644,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	Wakin
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	wakin khipukuna uraykachichkanraq utaq suyachkanraq
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	Kay torrentpa wakin willañiqinkunaqa kay qillqaqpiñam kachkan:
@@ -6112,6 +6125,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	Virus qhawana wakichiykuna
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	{n} khipu manaraq uraykachisqachu
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

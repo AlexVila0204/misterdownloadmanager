@@ -20,7 +20,7 @@ use std::time::Duration;
 
 use zip::result::ZipError;
 
-use crate::volumes::{MultiFile, VolumeKind, volume_key};
+use crate::volumes::{MultiFile, OnDisk, VolumeKind, on_disk, volume_key};
 use crate::{Error, Format};
 
 /// What a test found.
@@ -55,10 +55,18 @@ pub struct Test<'a> {
     pub progress: Option<&'a AtomicU32>,
 }
 
-/// Test `archive` (a split archive's first volume). `Err`: it wasn't tested
-/// ([`Error::NeedsPassword`]: it is encrypted; [`Error::NoTool`]: 7-Zip is needed and isn't
-/// there; [`Error::MissingVolume`], [`Error::Unsupported`]: not a ZIP, 7z or RAR).
+/// Test `archive` (any volume of a split archive: it is tested from its first). `Err`: it wasn't
+/// tested ([`Error::NeedsPassword`]: it is encrypted; [`Error::NoTool`]: 7-Zip is needed and
+/// isn't there; [`Error::MissingVolume`]: a split archive not complete yet, a volume of it still
+/// to come; [`Error::Unsupported`]: not a ZIP, 7z or RAR).
 pub fn test(archive: &Path, how: &Test<'_>) -> Result<Verdict, Error> {
+    // A set in several files is tested only once every volume is in: before, its end is
+    // missing, which reads as damage (#1661).
+    let (archive, several) = match on_disk(archive)? {
+        OnDisk::Incomplete(n) => return Err(Error::MissingVolume(n)),
+        OnDisk::Complete { open, files } => (open, files.len() > 1),
+    };
+    let archive = archive.as_path();
     let format = Format::detect(archive)?.ok_or(Error::Unsupported)?;
     if !matches!(format, Format::Zip | Format::SevenZip | Format::Rar) {
         return Err(Error::Unsupported);
@@ -68,11 +76,16 @@ pub fn test(archive: &Path, how: &Test<'_>) -> Result<Verdict, Error> {
         .map(|s| s.to_string_lossy().into_owned())
         .unwrap_or_default();
     let split = volume_key(&name).is_some_and(|v| v.kind == VolumeKind::Split);
+    // Named as one volume of several (x.part1.rar, x.7z.001): 7-Zip's "the archive ends too
+    // soon" is a volume still to come, even when the files there look like all of them.
+    let several = several || volume_key(&name).is_some_and(|v| v.kind != VolumeKind::RarOld);
+    // A spanned ZIP (x.z01… x.zip): only 7-Zip reads it.
+    let spanned = format == Format::Zip && several && !split;
     if split {
         MultiFile::open(archive)?.map_err(Error::MissingVolume)?;
     }
     let Some(tool) = how.tool else {
-        if format != Format::Zip {
+        if format != Format::Zip || spanned {
             return Err(Error::NoTool);
         }
         let found = zip_damage(archive, how.cancel, how.progress)?;
@@ -84,10 +97,11 @@ pub fn test(archive: &Path, how: &Test<'_>) -> Result<Verdict, Error> {
         Said::Password => Err(Error::NeedsPassword),
         Said::CantTest(why) => Err(Error::Damaged(why)),
         Said::MissingVolume => Err(Error::MissingVolume(0)),
-        Said::Damaged { entries, said } => {
+        Said::Damaged { ended: true, .. } if several => Err(Error::MissingVolume(0)),
+        Said::Damaged { entries, said, .. } => {
             // Where the damage is: a ZIP in one file, read by MDM's own reader, which must find
             // every entry 7-Zip named (7-Zip may read a method MDM doesn't).
-            let ranges = if format == Format::Zip && !split {
+            let ranges = if format == Format::Zip && !several {
                 match zip_damage(archive, how.cancel, how.progress) {
                     Ok(found) if covers(&found.bad, &entries) => found.ranges(),
                     Err(Error::Cancelled) => return Err(Error::Cancelled),
@@ -126,6 +140,9 @@ enum Said {
     Damaged {
         entries: Vec<String>,
         said: String,
+        /// It said the archive ends too soon ("Unexpected end of archive", "... of data"): a
+        /// split archive's volume still to come.
+        ended: bool,
     },
 }
 
@@ -250,6 +267,7 @@ fn read_said(code: Option<i32>, errors: &str) -> Said {
     }
     let mut entries = Vec::new();
     let (mut password, mut unsupported, mut whole_archive) = (false, false, false);
+    let ended = lower.contains("unexpected end");
     for line in errors.lines().map(str::trim) {
         let l = line.to_lowercase();
         if l.contains("wrong password") || l.contains("encrypted") {
@@ -301,6 +319,7 @@ fn read_said(code: Option<i32>, errors: &str) -> Said {
     Said::Damaged {
         entries,
         said: first(),
+        ended,
     }
 }
 
@@ -529,16 +548,18 @@ mod tests {
             read_said(Some(2), "ERROR: CRC Failed : dir\\b.bin\n"),
             Said::Damaged {
                 entries: vec!["dir/b.bin".into()],
-                said: "ERROR: CRC Failed : dir\\b.bin".into()
+                said: "ERROR: CRC Failed : dir\\b.bin".into(),
+                ended: false,
             }
         );
-        let Said::Damaged { entries, .. } = read_said(
+        let Said::Damaged { entries, ended, .. } = read_said(
             Some(2),
             "\nERRORS:\nUnexpected end of archive\n\nERROR: Data Error : dir\\b.bin\n",
         ) else {
             panic!("damaged")
         };
         assert_eq!(entries, ["dir/b.bin"]);
+        assert!(ended, "cut short: a split one's volume still to come");
         // Not an archive at all: damaged, no entry to place.
         assert_eq!(
             read_said(
@@ -547,7 +568,8 @@ mod tests {
             ),
             Said::Damaged {
                 entries: vec![],
-                said: "ERROR: x.zip | x.zip | Open ERROR: Cannot open the file as [zip] archive | ERRORS:".into()
+                said: "ERROR: x.zip | x.zip | Open ERROR: Cannot open the file as [zip] archive | ERRORS:".into(),
+                ended: false,
             }
         );
         // Encrypted: not tested, not damaged.
@@ -773,8 +795,110 @@ mod tests {
             };
             assert_eq!(d.ranges, None, "{tool:?}");
         }
+        // Not complete yet (the last volume to come, or one in the middle): never damage, with
+        // 7-Zip as without; asked from a later volume, it is the set's.
+        let last = std::fs::read(t.path().join("s.zip.003")).unwrap();
+        std::fs::remove_file(t.path().join("s.zip.003")).unwrap();
+        for tool in [None, crate::find_7zip()] {
+            let r = tested(&t.path().join("s.zip.002"), tool.as_deref());
+            assert!(
+                matches!(r, Err(Error::MissingVolume(3))),
+                "{r:?} ({tool:?})"
+            );
+        }
+        std::fs::write(t.path().join("s.zip.003"), last).unwrap();
         std::fs::remove_file(t.path().join("s.zip.002")).unwrap();
-        assert!(matches!(tested(&one, None), Err(Error::MissingVolume(2))));
+        for tool in [None, crate::find_7zip()] {
+            let r = tested(&one, tool.as_deref());
+            assert!(
+                matches!(r, Err(Error::MissingVolume(2))),
+                "{r:?} ({tool:?})"
+            );
+        }
+    }
+
+    /// A spanned ZIP as Info-ZIP's `zip -s` writes it (`x.z01`, `x.z02`… `x.zip`) from the ZIP at
+    /// `whole`, in volumes of `vol` bytes: its first starts with the spanning mark, its central
+    /// directory (in the last) names each entry's volume and its offset there.
+    fn span(whole: &Path, dir: &Path, stem: &str, vol: usize) -> Vec<std::path::PathBuf> {
+        let data = std::fs::read(whole).unwrap();
+        let eocd = data.len() - 22;
+        assert_eq!(&data[eocd..eocd + 4], b"PK\x05\x06");
+        let u16_at = |b: &[u8], i: usize| u16::from_le_bytes([b[i], b[i + 1]]) as usize;
+        let u32_at = |b: &[u8], i: usize| u32::from_le_bytes(b[i..i + 4].try_into().unwrap());
+        let entries = u16_at(&data, eocd + 10);
+        let (cd_size, cd_off) = (u32_at(&data, eocd + 12), u32_at(&data, eocd + 16));
+        let mut local = b"PK\x07\x08".to_vec();
+        local.extend_from_slice(&data[..cd_off as usize]);
+        let mut cd = data[cd_off as usize..(cd_off + cd_size) as usize].to_vec();
+        let mut pieces: Vec<Vec<u8>> = local.chunks(vol).map(<[u8]>::to_vec).collect();
+        let mut p = 0;
+        for _ in 0..entries {
+            assert_eq!(&cd[p..p + 4], b"PK\x01\x02");
+            let lens = u16_at(&cd, p + 28) + u16_at(&cd, p + 30) + u16_at(&cd, p + 32);
+            let off = u32_at(&cd, p + 42) as usize + 4;
+            cd[p + 34..p + 36].copy_from_slice(&((off / vol) as u16).to_le_bytes());
+            cd[p + 42..p + 46].copy_from_slice(&((off % vol) as u32).to_le_bytes());
+            p += 46 + lens;
+        }
+        let last = pieces.len() - 1;
+        let at = pieces[last].len() as u32;
+        let mut end = b"PK\x05\x06".to_vec();
+        for f in [last, last, entries, entries] {
+            end.extend_from_slice(&(f as u16).to_le_bytes());
+        }
+        end.extend_from_slice(&cd_size.to_le_bytes());
+        end.extend_from_slice(&at.to_le_bytes());
+        end.extend_from_slice(&[0, 0]);
+        pieces[last].extend_from_slice(&cd);
+        pieces[last].extend_from_slice(&end);
+        pieces
+            .iter()
+            .enumerate()
+            .map(|(k, piece)| {
+                let name = if k == last {
+                    format!("{stem}.zip")
+                } else {
+                    format!("{stem}.z{:02}", k + 1)
+                };
+                let path = dir.join(name);
+                std::fs::write(&path, piece).unwrap();
+                path
+            })
+            .collect()
+    }
+
+    /// A spanned ZIP: tested by 7-Zip from its first volume once every one is in, from any of
+    /// them; its damage said; a volume missing is no damage; without 7-Zip, not tested.
+    #[test]
+    fn a_spanned_zip_is_tested_once_every_volume_is_in() {
+        let t = tempfile::tempdir().unwrap();
+        let whole = t.path().join("w.zip");
+        let heads = zip_of(&whole, None);
+        let dir = t.path().join("dl");
+        std::fs::create_dir(&dir).unwrap();
+        let files = span(&whole, &dir, "sv", 90_000);
+        assert_eq!(files.len(), 3, "{files:?}");
+        assert!(matches!(tested(&files[0], None), Err(Error::NoTool)));
+        let Some(tool) = crate::find_7zip() else {
+            eprintln!("7-Zip not found: skipped");
+            return;
+        };
+        for f in &files {
+            assert_eq!(tested(f, Some(&tool)).unwrap(), Verdict::Whole, "{f:?}");
+        }
+        let middle = std::fs::read(&files[1]).unwrap();
+        std::fs::remove_file(&files[1]).unwrap();
+        let r = tested(&files[2], Some(&tool));
+        assert!(matches!(r, Err(Error::MissingVolume(2))), "{r:?}");
+        std::fs::write(&files[1], middle).unwrap();
+        // b.bin's data, in the second volume: damaged, not placed.
+        let at = heads[1].1 as usize + 4 + 100_000 - 90_000;
+        spoil(&files[1], at as u64, 32);
+        let Verdict::Damaged(d) = tested(&files[0], Some(&tool)).unwrap() else {
+            panic!("damaged")
+        };
+        assert_eq!((d.entries, d.ranges), (vec!["dir/b.bin".to_string()], None));
     }
 
     /// 7z through 7-Zip: whole, or damaged without a place (its entries are in solid blocks).

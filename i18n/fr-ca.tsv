@@ -329,6 +329,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	il manque un de ses volumes
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	un de ses volumes n’est pas encore là
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	About Mister Download Manager	À propos de Mister Download Manager
@@ -3543,6 +3547,11 @@
 #, machine
 	not supported by this service	non pris en charge par ce service
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	Pas encore testé : {name} n’est pas complet ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	Non testé : il est plus volumineux que {limit} (Options → Archives). Clic droit → Tester l’archive pour le tester
@@ -4639,6 +4648,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	Partiel
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	certains de ses volumes sont encore en cours de téléchargement
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	Certains fichiers du torrent sont déjà dans ce dossier :
@@ -4957,6 +4970,15 @@
 #. in a download's log: the archive's damaged parts were downloaded again, and its test now finds no error
 #, machine
 	Tested again: the archive has no errors now	Testé à nouveau : l’archive ne contient plus d’erreurs
+#. text in archtest.rs; text in the download list (sizes, speeds, status)
+#. in a download's log: its archive is being tested (read back and checked) before the download counts as done
+#. the trailing ... means it is still going on: keep it
+#, machine
+	Testing the archive...	Test de l’archive en cours...
+#. text in the download list (sizes, speeds, status)
+#. a download's status while its archive (zip, 7z, rar) is read back and checked before the download counts as done; {percent} how far, e.g. "45%"
+#, machine
+	Testing the archive... ({percent})	Test de l’archive en cours... ({percent})
 #. text in the Scheduler window
 #. Thursday, as short as a calendar's column head (two letters in English)
 #, machine
@@ -6107,6 +6129,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	Paramètres de vérification des virus
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	le volume {n} n’est pas encore là
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

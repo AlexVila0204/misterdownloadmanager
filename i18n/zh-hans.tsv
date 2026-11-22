@@ -270,6 +270,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	缺少其中一个卷
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	其中一个分卷尚未下载
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 	About Mister Download Manager	关于 Mister Download Manager
 #. text in whereis.rs
@@ -3449,6 +3453,11 @@
 #, machine
 	not supported by this service	此服务不支持
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	尚未测试：{name} 不完整 ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	未测试：它大于 {limit}（选项 → 存档）。右键单击 → 测试存档可测试它
@@ -4542,6 +4551,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	部分
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	其中一些分卷仍在下载中
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	此文件夹中已存在种子的部分文件：
@@ -6018,6 +6031,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	病毒检查设置
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	分卷 {n} 尚未下载
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

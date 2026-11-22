@@ -329,6 +329,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	దాని వాల్యూమ్ లేదు
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	దాని వాల్యూమ్ ఇంకా లేదు
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	About Mister Download Manager	Mister Download Manager గురించి
@@ -3539,6 +3543,11 @@
 #, machine
 	not supported by this service	ఈ సేవ ద్వారా మద్దతు లేదు
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	ఇంకా పరీక్షించబడలేదు: {name} అసంపూర్తిగా ఉంది ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	పరీక్షించలేదు: ఇది {limit} కంటే పెద్దది (ఎంపికలు → ఆర్కైవ్‌లు). కుడి-క్లిక్ → ఆర్కైవ్‌ను పరీక్షించండి ఎంచుకుంటే దీన్ని పరీక్షిస్తుంది
@@ -4635,6 +4644,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	కొన్ని
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	దాని వాల్యూమ్‌లలో కొన్ని ఇంకా డౌన్‌లోడ్ అవుతున్నాయి
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	టొరెంట్ యొక్క కొన్ని ఫైల్‌లు ఇప్పటికే ఈ ఫోల్డర్‌లో ఉన్నాయి:
@@ -6112,6 +6125,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	వైరస్ తనిఖీ సెట్టింగ్‌లు
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	వాల్యూమ్ {n} ఇంకా లేదు
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

@@ -256,6 +256,9 @@
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 	a volume of it is missing	a volume of it is missing
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+	a volume of it isn't there yet	a volume of it isn't there yet
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 	About Mister Download Manager	About Mister Download Manager
 #. text in whereis.rs
@@ -2635,6 +2638,10 @@
 #. Options → Accounts: the service doesn't take this file host (shouldn't happen when signing in)
 	not supported by this service	not supported by this service
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+	Not tested yet: {name} isn't complete ({why})	Not tested yet: {name} isn't complete ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it
 #. text in the Options window
@@ -3447,6 +3454,9 @@
 #. text in a download's progress window
 #. legend: pieces partly downloaded
 	Some	Some
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+	some of its volumes are still downloading	some of its volumes are still downloading
 #. text in a dialog box
 	Some of the torrent's files are already in this folder:	Some of the torrent's files are already in this folder:
 #. text in the Options window
@@ -4540,6 +4550,10 @@
 	Virgin Islands (U.S.)	Virgin Islands (U.S.)
 #. text in the Options window
 	Virus checking settings	Virus checking settings
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+	volume {n} isn't there yet	volume {n} isn't there yet
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

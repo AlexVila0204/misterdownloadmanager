@@ -4480,6 +4480,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	ᎢᎦᎢ
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	ᎢᎦᏛ ᎠᏍᏆᏂᎪᏙᏗ ᎢᏯᏓᏛᏁᏗ ᏓᏃᎴᏗᏍᎬᎢ
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	ᎢᎦᏛ ᎢᏗᏟᏴᏔᏅᎯ ᎤᎾᏤᎵ ᎢᏗᏟᏴᏔᏅᎯ ᎦᏳᎳ ᎾᎿᏂ ᎯᎠ ᏗᏟᏴᏔᏅᎯ ᏗᏍᏆᏂᎪᏙᏗ ᎨᏒᎢ:
@@ -5466,6 +5470,9 @@
 #. {site} = a web site's name such as "example.com" (keep the braces as they are)
 #, machine
 	this {site} link is a web page, not the file: open it in your browser and download from there	ᎯᎠ {site} ᏗᎪᏪᎵ ᏗᎪᏪᎵ ᏗᎪᏪᎵ, ᎥᏝ ᏗᎪᏪᎵ: ᎤᎵᏍᏚᎢᏒᎢ ᏗᏣᏃᏟᏍᏙᏗ ᎠᎴ ᏗᎪᏪᎵ ᎾᎿ.
+#. text in helpers.rs
+#, machine
+	Three free helpers make it work. Get them now, and saving a video is one click away when you find one.	ᏦᎢ ᎢᏯᏓᏛᏁᏗ ᎾᏍᎩ ᎢᏳᏩᏁᏗ. ᎪᎯ ᎢᎪᎯᏓ ᏕᎭᏩᏛ, ᎠᎴ ᏗᏓᏟᎶᏍᏔᏅᎯ ᏗᏓᏍᏆᏂᎪᏙᏗ ᏌᏉᏉ ᎢᏯᏓᏛᏁᏗ ᎨᏒᎢ.
 #. text in whereis.rs
 #. where a download's server is, when a proxy carries it (the proxy's place not known)
 #, machine
@@ -5954,6 +5961,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	ᎤᏕᏯᏙᏗ ᏗᎦᏁᎶᏗ ᏗᏙᎳᏤᏗ
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	ᎠᏍᏆᏂᎪᏙᏗ {n} ᎠᏏᏉ ᎾᎿ ᎨᏒᎢ
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)

@@ -279,6 +279,10 @@
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 	a volume of it is missing	ne manca un volume
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	un suo volume non è ancora presente
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 	About Mister Download Manager	Informazioni su Mister Download Manager
 #. text in whereis.rs
@@ -2782,6 +2786,11 @@
 #. Options → Accounts: the service doesn't take this file host (shouldn't happen when signing in)
 	not supported by this service	non supportato da questo servizio
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	Non ancora testato: {name} non è completo ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	Non provato: è più grande di {limit} (Opzioni → Archivi). Fai clic destro → Prova archivio per provarlo
@@ -3631,6 +3640,10 @@
 #. text in a download's progress window
 #. legend: pieces partly downloaded
 	Some	Parziali
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	alcuni dei suoi volumi sono ancora in download
 #. text in a dialog box
 	Some of the torrent's files are already in this folder:	Alcuni file del torrent sono già presenti in questa cartella:
 #. text in the Options window
@@ -4814,6 +4827,11 @@
 	Virgin Islands (U.S.)	Isole Vergini statunitensi
 #. text in the Options window
 	Virus checking settings	Impostazioni antivirus
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	il volume {n} non è ancora presente
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)
@@ -6656,6 +6674,10 @@ menu	Te&xt	&Testo
 #. menu command in the main window
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	Tell a &friend	&Consiglia a un amico
+#. menu command in the main window
+#. verb: read the downloaded archive (zip, 7z, rar) back and check that none of its files is damaged
+#, machine
+menu	Test archive	Verifica archivio
 #. menu command in the main window
 #. View → Draw with: a greyed note under "… didn't start here"; why: the graphics card stopped working twice (a driver update or reset)
 menu	The graphics card was lost twice in 10 minutes	La scheda grafica ha smesso di rispondere due volte in 10 minuti

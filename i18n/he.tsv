@@ -281,6 +281,10 @@
 #. why an archive wasn't extracted (after "Couldn't extract {name}: ")
 #, machine
 	a volume of it is missing	חסר אמצעי אחסון בארכיון
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+#, machine
+	a volume of it isn't there yet	אחד הכרכים שלו עדיין חסר
 #. window title in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #, machine
 	About Mister Download Manager	אודות Mister Download Manager
@@ -3490,6 +3494,11 @@
 #, machine
 	not supported by this service	לא נתמך על ידי שירות זה
 #. text in archtest.rs
+#. in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+#. {name} = a file name (keep the braces as they are)
+#, machine
+	Not tested yet: {name} isn't complete ({why})	טרם נבדק: {name} אינו שלם ({why})
+#. text in archtest.rs
 #. in a download's log: an archive larger than Options → Archives' limit for its test wasn't tested; {limit} like "4.00 GB"; "Test archive" is the right-click command
 #, machine
 	Not tested: it is larger than {limit} (Options → Archives). Right-click → Test archive tests it	לא נבדק: גדול מ־{limit} (אפשרויות ← ארכיונים). לחץ לחיצה ימנית ובחר בדוק ארכיון כדי לבדוק אותו
@@ -4586,6 +4595,10 @@
 #. legend: pieces partly downloaded
 #, machine
 	Some	חלקית
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+#, machine
+	some of its volumes are still downloading	חלק מהחלקים שלו עדיין בהורדה
 #. text in a dialog box
 #, machine
 	Some of the torrent's files are already in this folder:	חלק מקובצי הטורנט כבר נמצאים בתיקייה זו:
@@ -6063,6 +6076,11 @@
 #. text in the Options window
 #, machine
 	Virus checking settings	הגדרות בדיקת וירוסים
+#. text in archtest.rs
+#. why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+#. {n} = a number (keep the braces as they are)
+#, machine
+	volume {n} isn't there yet	חלק {n} עדיין חסר
 #. text in extracting archives (a download's log, the Archive password window)
 #. why an archive wasn't extracted (after "Couldn't extract {name}: "); {n} is the volume's number
 #. {n} = a number (keep the braces as they are)
@@ -6163,6 +6181,10 @@
 #. why the computer could not be put to sleep (fills {error})
 #, machine
 	Windows refused	Windows סירב
+#. message or event log entry in the main window
+#. after ticking "Open magnet links and .torrent files with Mister Download Manager", when Windows' Default apps keeps another app; {apps}: their names. "MAGNET" as Windows' Default apps lists it
+#, machine
+	Windows still opens magnet links or .torrent files with {apps}, chosen in Windows' Default apps, where only you can change it. Settings opens there now: pick Mister Download Manager for MAGNET and .torrent.	Windows עדיין פותחת קישורי magnet או קובצי torrent באמצעות {apps}, שנבחרו באפליקציות ברירת המחדל של Windows, שם רק אתה יכול לשנות זאת. ההגדרות נפתחות שם כעת: בחר את Mister Download Manager עבור MAGNET ו־.torrent.
 #. text in langpick.rs
 #, machine
 	Windows' language	שפת Windows

@@ -1,5 +1,5 @@
 //! Testing archives when their download completes (#1661): a ZIP, 7z or RAR (a split one once
-//! its last volume is in) is read back whole and checked before its download counts as done,
+//! every volume is in) is read back whole and checked before its download counts as done,
 //! with Options → Archives → "Test archives when their download completes" (on, up to a size
 //! there, 4 GB at first: a test reads the whole file); right-click → Test archive tests one by
 //! hand, whatever its size. One archive at a time, on a thread of its own (mdm-extract's `check`
@@ -14,6 +14,14 @@
 //! the file), and is tested once more; still damaged then, it is offered for Redownload. 7z and
 //! RAR (solid blocks, which 7-Zip's output doesn't place) and split archives are tested and told
 //! only.
+//!
+//! A split archive (`x.zip.001`, `x.z01`, `x.7z.001`, `x.part1.rar`, `x.r00`) is tested once,
+//! from its first volume, when the last of its volumes to finish is in: every volume on disk, the
+//! last saying it is the last (`mdm_extract::on_disk`), and none still a download running,
+//! queued or stopped in the list. Its volumes often finish one after another (a queue taking one
+//! at a time, a host's wait between them), and the ones in so far read as an archive cut short:
+//! never damage. 7-Zip's own "missing volume" and "unexpected end" on a split archive say the
+//! same (not complete yet), and Test archive on one says it isn't complete.
 
 use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
@@ -34,6 +42,7 @@ use crate::winui::{self, ButtonKind, LIGHT_BG, LIGHT_TEXT};
 pub fn tested_name(name: &str) -> bool {
     let lower = name.to_lowercase();
     volume_key(&lower).is_some()
+        || mdm_extract::spanned_part(&lower)
         || [".zip", ".7z", ".rar"]
             .iter()
             .any(|e| lower.ends_with(e) && lower.len() > e.len())
@@ -108,8 +117,8 @@ pub struct Tests {
 impl Tests {
     /// Download `id` just finished: whether it waits for its archive's test (true: its finishing
     /// comes with [`Done::Release`]). Tested when Options says so and it is no larger than its
-    /// limit, a split archive once its last volume is in; always when its damaged parts were just
-    /// downloaded again.
+    /// limit, a split archive once every volume of it is in ([`ready`]); always when its damaged
+    /// parts were just downloaded again.
     pub fn hold(&mut self, id: u64, items: &mut [Item], settings: &Settings) -> bool {
         let Some(item) = items.iter().find(|i| i.id == id) else {
             return false;
@@ -121,16 +130,32 @@ impl Tests {
         if !settings.test_archives && !again {
             return false;
         }
-        let Some(set) = whole_set(item, items) else {
-            return false;
+        // A split archive once every volume is in (#1661): before, its end is missing, which
+        // a test reads as damage. Its last volume to finish tests it.
+        let (archive, files, ids) = match ready(item, items) {
+            Ready::Yes {
+                archive,
+                files,
+                ids,
+            } => (archive, files, ids),
+            not => {
+                tracing::info!("archive test: download {id}: not yet: {not:?}");
+                return false;
+            }
         };
-        let archive = set[0].1.clone();
         if self.waiting(&archive) {
             return false;
         }
-        let size: u64 = set
+        // Every volume's, the ones not downloaded by MDM too (the list's size when a file
+        // doesn't say).
+        let size: u64 = files
             .iter()
-            .filter_map(|(id, _, _)| items.iter().find(|i| i.id == *id)?.size)
+            .filter_map(|f| {
+                std::fs::metadata(f)
+                    .map(|m| m.len())
+                    .ok()
+                    .or_else(|| items.iter().find(|i| &i.dest == f)?.size)
+            })
             .sum();
         let limit = settings.test_limit();
         if !again && size > limit {
@@ -145,13 +170,13 @@ impl Tests {
             }
             return false;
         }
-        let kept = (set.len() == 1)
+        let kept = (files.len() == 1)
             .then(|| item.snap.as_ref().and_then(|s| s.kept.clone()))
             .flatten();
         let job = Job {
             held: Some(id),
             shown: id,
-            ids: set.iter().map(|(i, _, _)| *i).collect(),
+            ids,
             archive,
             by_hand: false,
             again,
@@ -170,20 +195,36 @@ impl Tests {
         if !testable(item) || item.testing {
             return;
         }
-        let Some(set) = whole_set(item, items) else {
-            return;
+        let (archive, files, ids) = match ready(item, items) {
+            Ready::Yes {
+                archive,
+                files,
+                ids,
+            } => (archive, files, ids),
+            // Not complete yet: said so, never damaged.
+            not => {
+                let name = item.file_name.clone();
+                let text = match not {
+                    Ready::Unreadable(e) => not_tested(&name, &Error::Io(e)),
+                    not => incomplete_text(&name, &not),
+                };
+                if let Some(i) = items.iter_mut().find(|i| i.id == id) {
+                    i.note(text.clone());
+                }
+                self.told = Some(text);
+                return;
+            }
         };
-        let archive = set[0].1.clone();
         if self.waiting(&archive) {
             return;
         }
-        let kept = (set.len() == 1)
+        let kept = (files.len() == 1)
             .then(|| item.snap.as_ref().and_then(|s| s.kept.clone()))
             .flatten();
         let job = Job {
             held: None,
             shown: id,
-            ids: set.iter().map(|(i, _, _)| *i).collect(),
+            ids,
             archive,
             by_hand: true,
             again: item.refetched,
@@ -201,9 +242,12 @@ impl Tests {
                 continue;
             };
             let set = (settings.test_archives && testable(item))
-                .then(|| whole_set(item, items))
+                .then(|| match ready(item, items) {
+                    Ready::Yes { archive, ids, .. } => Some((archive, ids)),
+                    _ => None,
+                })
                 .flatten();
-            let Some(set) = set.filter(|s| !self.waiting(&s[0].1)) else {
+            let Some((archive, ids)) = set.filter(|(a, _)| !self.waiting(a)) else {
                 if let Some(i) = items.iter_mut().find(|i| i.id == id) {
                     i.testing = false;
                 }
@@ -212,8 +256,8 @@ impl Tests {
             let job = Job {
                 held: None,
                 shown: id,
-                ids: set.iter().map(|(i, _, _)| *i).collect(),
-                archive: set[0].1.clone(),
+                ids,
+                archive,
                 by_hand: false,
                 again: false,
                 kept: None,
@@ -350,6 +394,16 @@ impl Tests {
             Ok(Verdict::Damaged(d)) => d,
             // Deleted, or MDM is closing: nothing to say (at the next start it is tested again).
             Err(Error::Cancelled) => return Vec::new(),
+            // A split archive a volume of which is still to come (7-Zip found its end missing):
+            // not complete yet, never damage.
+            Err(Error::MissingVolume(n)) => {
+                let text = incomplete_text(&name, &Ready::Missing(n));
+                note(items, &text);
+                if job.by_hand {
+                    self.told = Some(text);
+                }
+                return release(items);
+            }
             // Its bytes are no ZIP, 7z or RAR, as its name says: it is damaged (a web page
             // saved in its place, cut short), nowhere to place it.
             Err(Error::Unsupported) => mdm_extract::Damage {
@@ -433,19 +487,101 @@ impl Tests {
     }
 }
 
-/// The volumes of `item`'s archive, each (download, file, number), when every one is
-/// downloaded, numbered from 1 with none missing; the first volume's file first.
-fn whole_set(item: &Item, items: &[Item]) -> Option<Vec<(u64, PathBuf, u32)>> {
-    let set = crate::extractq::volume_set(item, items);
-    if set.iter().any(|(_, i)| i.status != Status::Complete)
-        || set.iter().enumerate().any(|(k, (n, _))| *n != k as u32 + 1)
-    {
-        return None;
-    }
-    Some(
-        set.into_iter()
-            .map(|(n, i)| (i.id, i.dest.clone(), n))
+/// Whether `item`'s archive (every volume of a split one) can be tested now (#1661).
+#[derive(Debug)]
+enum Ready {
+    /// Every volume is on disk and none is still to download: the file to test (its first
+    /// volume), every volume's file, and their downloads in the list (the first volume's first).
+    Yes {
+        archive: PathBuf,
+        files: Vec<PathBuf>,
+        ids: Vec<u64>,
+    },
+    /// A volume of it is a download still running, queued or stopped in the list.
+    Downloading,
+    /// Volume `n` of it (0: one, which isn't known) isn't on disk: more is to come.
+    Missing(u32),
+    /// Its folder or its files didn't read.
+    Unreadable(std::io::Error),
+}
+
+/// Is `item`'s archive complete? The list and the disk both say: no volume of it is a download
+/// still to finish (same folder, a name of the same set), and every volume is on disk, the last
+/// saying it is the last (`mdm_extract::on_disk`). A split archive's volumes finish one after
+/// another (a queue taking one at a time, a host's wait between them, some added later): the
+/// volumes finished so far are no complete archive, whatever the list holds yet.
+fn ready(item: &Item, items: &[Item]) -> Ready {
+    let dir = item.dest.parent();
+    let set: Vec<&Item> = match mdm_extract::set_key(&item.file_name) {
+        Some(key) => items
+            .iter()
+            .filter(|i| {
+                i.dest.parent() == dir
+                    && mdm_extract::set_key(&i.file_name).as_deref() == Some(key.as_str())
+            })
             .collect(),
+        None => vec![item],
+    };
+    let unfinished = |i: &&Item| {
+        i.id != item.id
+            && matches!(
+                i.status,
+                Status::Downloading | Status::Queued | Status::Stopped
+            )
+    };
+    let disk = mdm_extract::on_disk(&item.dest);
+    // A ZIP in one file is its own whole set: another download of the same name still to come
+    // (the same file again, to be numbered) is none of its volumes.
+    let one_zip = volume_key(&item.file_name).is_none()
+        && matches!(&disk, Ok(mdm_extract::OnDisk::Complete { files, .. }) if files.len() == 1);
+    if !one_zip && set.iter().any(unfinished) {
+        return Ready::Downloading;
+    }
+    let (archive, files) = match disk {
+        Ok(mdm_extract::OnDisk::Complete { open, files }) => (open, files),
+        Ok(mdm_extract::OnDisk::Incomplete(n)) => return Ready::Missing(n),
+        Err(e) => return Ready::Unreadable(e),
+    };
+    // The downloads of its files, in volume order (a volume downloaded another way has none).
+    let same = |a: &Path, b: &Path| {
+        a.parent() == b.parent()
+            && a.file_name().map(|n| n.to_string_lossy().to_lowercase())
+                == b.file_name().map(|n| n.to_string_lossy().to_lowercase())
+    };
+    let mut ids: Vec<u64> = files
+        .iter()
+        .filter_map(|f| set.iter().find(|i| same(&i.dest, f)).map(|i| i.id))
+        .collect();
+    if !ids.contains(&item.id) {
+        ids.push(item.id);
+    }
+    Ready::Yes {
+        archive,
+        files,
+        ids,
+    }
+}
+
+/// The words for a split archive not complete yet (`not`: why), never called damaged: in its
+/// log, and Test archive's message.
+fn incomplete_text(name: &str, not: &Ready) -> String {
+    let why = match not {
+        Ready::Downloading => {
+            // i18n: why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": some of its files are still downloading or waiting in the list
+            crate::i18n::t("some of its volumes are still downloading").to_owned()
+        }
+        Ready::Missing(n) if *n > 0 => crate::i18n::fmt(
+            // i18n: why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})"; {n} is the number of the volume not downloaded yet
+            crate::i18n::t("volume {n} isn't there yet"),
+            &[("n", &n.to_string())],
+        ),
+        // i18n: why a split archive (in several files, its volumes) isn't tested yet, in "{name} isn't complete ({why})": one of its files isn't downloaded yet
+        _ => crate::i18n::t("a volume of it isn't there yet").to_owned(),
+    };
+    crate::i18n::fmt(
+        // i18n: in a download's log and the Test archive message: a split archive is tested only once every volume is downloaded; {name} is its file name, {why} which volume is missing
+        crate::i18n::t("Not tested yet: {name} isn't complete ({why})"),
+        &[("name", &crate::i18n::isolate(name)), ("why", &why)],
     )
 }
 
@@ -707,29 +843,168 @@ mod tests {
         assert!(q.queue.is_empty());
     }
 
+    /// A download of `name` in `dir`, finished, its file written (`data`), or none yet.
+    fn volume(id: u64, dir: &Path, name: &str, data: Option<&[u8]>) -> Item {
+        let mut i = item(id, name, 300);
+        i.dest = dir.join(name);
+        match data {
+            Some(d) => std::fs::write(&i.dest, d).unwrap(),
+            None => i.status = Status::Queued,
+        }
+        i
+    }
+
+    /// A 7z of 900 bytes (its start header says so), cut in three volumes of 300.
+    fn seven_parts() -> Vec<Vec<u8>> {
+        let mut data = vec![b'7', b'z', 0xBC, 0xAF, 0x27, 0x1C, 0, 4, 0, 0, 0, 0];
+        data.extend_from_slice(&800u64.to_le_bytes());
+        data.extend_from_slice(&68u64.to_le_bytes());
+        data.resize(900, 1);
+        data.chunks(300).map(<[u8]>::to_vec).collect()
+    }
+
+    /// Its volumes finishing one after another, the middle one last: tested once, when that
+    /// one is in, from the first; never before, whatever the list holds so far.
     #[test]
-    fn a_split_archive_is_tested_once_its_last_volume_is_in() {
-        let mut items = vec![
-            item(1, "m.part1.rar", 100),
-            item(2, "m.part2.rar", 100),
-            item(3, "m.part3.rar", 100),
-        ];
-        items[1].status = Status::Downloading;
+    fn a_split_archive_is_tested_once_every_volume_is_in() {
+        let t = tempfile::tempdir().unwrap();
+        let d = t.path();
+        let parts = seven_parts();
         let mut q = Tests::default();
-        assert!(
-            !q.hold(1, &mut items, &on()),
-            "volume 2 is still downloading"
-        );
+        // A queue taking one at a time: only volume 1 is in the list yet, finished.
+        let mut items = vec![volume(1, d, "m.7z.001", Some(&parts[0]))];
+        assert!(!q.hold(1, &mut items, &on()), "volumes 2 and 3 are to come");
+        assert!(!items[0].testing && q.queue.is_empty());
+        // Volumes 2 (queued) and 3 (finished) added; 3 finishes before 2.
+        items.push(volume(2, d, "m.7z.002", None));
+        items.push(volume(3, d, "m.7z.003", Some(&parts[2])));
+        assert!(!q.hold(3, &mut items, &on()), "volume 2 is still queued");
+        assert!(matches!(ready(&items[2], &items), Ready::Downloading));
+        // Running: the same.
+        items[1].status = Status::Downloading;
+        assert!(!q.hold(3, &mut items, &on()));
+        // Finished in the list but its file not there (moved, deleted): the disk says.
         items[1].status = Status::Complete;
+        assert!(matches!(ready(&items[1], &items), Ready::Missing(2)));
+        assert!(!q.hold(2, &mut items, &on()));
+        std::fs::write(&items[1].dest, &parts[1]).unwrap();
         assert!(q.hold(2, &mut items, &on()));
+        assert_eq!(q.queue.len(), 1, "once");
         let job = &q.queue[0];
         assert_eq!(job.ids, [1, 2, 3]);
-        assert_eq!(job.archive, PathBuf::from("dl").join("m.part1.rar"));
+        assert_eq!(job.archive, d.join("m.7z.001"));
         assert_eq!((job.held, job.shown), (Some(2), 2));
         assert!(
             job.kept.is_none(),
             "a split archive's damage is never re-fetched"
         );
+        // Said again by another of its volumes: still once.
+        assert!(!q.hold(3, &mut items, &on()));
+        assert_eq!(q.queue.len(), 1);
+    }
+
+    /// A ZIP in one file with another download of the same name still queued (the same file
+    /// again, to be numbered): no volume of it, it is tested.
+    #[test]
+    fn a_zip_in_one_file_does_not_wait_for_a_namesake() {
+        let mut items = vec![item(1, "a.zip", 1000), item(2, "a.zip", 1000)];
+        items[1].status = Status::Queued;
+        let mut q = Tests::default();
+        assert!(q.hold(1, &mut items, &on()));
+        assert_eq!(q.queue[0].ids, [1]);
+    }
+
+    /// The last volume on disk says more is to come (a RAR's end header): not tested, though
+    /// every volume the list has is finished.
+    #[test]
+    fn a_volume_that_says_more_follows_waits() {
+        let t = tempfile::tempdir().unwrap();
+        let d = t.path();
+        let end = |more: u8| {
+            let mut v = b"Rar!\x1A\x07\x01\x00 some data".to_vec();
+            let body = [3u8, 5, 0, more];
+            v.extend_from_slice(&crc32(&body).to_le_bytes());
+            v.extend_from_slice(&body);
+            v
+        };
+        let mut items = vec![
+            volume(1, d, "m.part1.rar", Some(&end(1))),
+            volume(2, d, "m.part2.rar", Some(&end(1))),
+        ];
+        let mut q = Tests::default();
+        assert!(!q.hold(2, &mut items, &on()));
+        assert!(matches!(ready(&items[1], &items), Ready::Missing(3)));
+        items.push(volume(3, d, "m.part3.rar", Some(&end(0))));
+        assert!(q.hold(3, &mut items, &on()));
+        assert_eq!(q.queue[0].archive, d.join("m.part1.rar"));
+    }
+
+    /// The CRC-32 a RAR 5 header carries (zlib's, by hand: the app has no crc32 crate of its own).
+    fn crc32(b: &[u8]) -> u32 {
+        let mut c = !0u32;
+        for &x in b {
+            c ^= x as u32;
+            for _ in 0..8 {
+                c = if c & 1 != 0 {
+                    (c >> 1) ^ 0xEDB8_8320
+                } else {
+                    c >> 1
+                };
+            }
+        }
+        !c
+    }
+
+    /// Test archive on a split archive not complete yet: said so, nothing tested, nothing
+    /// damaged; 7-Zip finding its end missing says the same.
+    #[test]
+    fn an_incomplete_split_archive_is_said_incomplete_never_damaged() {
+        let t = tempfile::tempdir().unwrap();
+        let d = t.path();
+        let parts = seven_parts();
+        let mut items = vec![
+            volume(1, d, "m.7z.001", Some(&parts[0])),
+            volume(3, d, "m.7z.003", Some(&parts[2])),
+        ];
+        let mut q = Tests::default();
+        q.by_hand(1, &mut items);
+        assert!(q.queue.is_empty() && !items[0].testing && !items[0].damaged);
+        let told = q.told.take().unwrap();
+        assert!(
+            told.contains("isn't complete") && told.contains("volume 2"),
+            "{told}"
+        );
+        assert!(
+            items[0]
+                .log
+                .iter()
+                .any(|(_, t)| t.contains("isn't complete"))
+        );
+        // Volume 2 still downloading.
+        items.push(volume(2, d, "m.7z.002", None));
+        items[2].status = Status::Downloading;
+        q.by_hand(3, &mut items);
+        let told = q.told.take().unwrap();
+        assert!(told.contains("still downloading"), "{told}");
+        // Complete as far as the disk says, but 7-Zip finds a volume missing: not damage.
+        std::fs::write(&items[2].dest, &parts[1]).unwrap();
+        items[2].status = Status::Complete;
+        q.by_hand(1, &mut items);
+        assert_eq!(q.queue[0].ids, [1, 2, 3]);
+        let done = outcome(&mut q, &mut items, Err(Error::MissingVolume(0)));
+        assert!(done.is_empty(), "by hand: nothing waits");
+        assert!(q.damaged.is_none());
+        assert!(items.iter().all(|i| !i.damaged && !i.testing));
+        assert!(
+            q.told
+                .as_deref()
+                .is_some_and(|t| t.contains("isn't complete"))
+        );
+        // Its download waiting for the test: released, not damaged.
+        assert!(q.hold(2, &mut items, &on()));
+        let done = outcome(&mut q, &mut items, Err(Error::MissingVolume(0)));
+        assert_eq!(done, [Done::Release(2)]);
+        assert!(q.damaged.is_none() && items.iter().all(|i| !i.damaged));
     }
 
     fn outcome(q: &mut Tests, items: &mut [Item], r: Result<Verdict, Error>) -> Vec<Done> {
