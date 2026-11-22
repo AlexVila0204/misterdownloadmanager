@@ -935,18 +935,14 @@ fn one(ui: &mut Ui, x0: f32, x1: f32, y0: f32, item: &Item) -> f32 {
     }
     let mut y = boxed.bottom() + 14.0;
 
-    // Its name, bold, on up to three lines; its type under it.
-    let name = crate::i18n::isolate(&item.file_name);
+    // Its name, bold, on up to three lines broken at its own separators, its extension whole;
+    // its type under it. Each line a text of its own direction (an Arabic name in an English
+    // window reads right to left, a Latin one in an Arabic window left to right).
     let font = winui::tahoma_bold();
-    let mut lines = winui::wrap_lines_font(&p, font.clone(), &name, x1 - x0);
-    if lines.len() > 3 {
-        let rest = lines[2..].join(" ");
-        lines.truncate(2);
-        lines.push(winui::ellipsize(&p, &font, &rest, x1 - x0));
-    }
+    let lines = winui::name_lines_in(&p, font.clone(), &item.file_name, x1 - x0, 3);
     let top = y - 11.0;
     for l in &lines {
-        winui::text_font(&p, font.clone(), x0, y, l, ink());
+        winui::text_font(&p, font.clone(), x0, y, &crate::i18n::isolate(l), ink());
         y += LINE;
     }
     let name_rc = winui::rect(Rect::from_min_max(pos2(x0, top), pos2(x1, y - LINE + 4.0)));
