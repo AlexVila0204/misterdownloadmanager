@@ -2892,6 +2892,11 @@
 #. the trailing ... means it is still going on: keep it
 #, machine
 	Looking the page up...	Recherche de la page...
+#. text in preview.rs
+#. the preview pane: still looking whether the file is there
+#. the trailing ... means it is still going on: keep it
+#, machine
+	Looking...	Recherche en cours...
 #. text in countries.rs
 #. a country's name (where a download's server is)
 #, machine
@@ -7016,6 +7021,11 @@ extension	Done	Terminé
 #. button beside a video, sound or stream in the toolbar button's popup: download it with the app; verb; short
 #, machine
 extension	Download	Télécharger
+#. text in the browser extension
+#. command in the menu of the download button over a video: opens the app's Download video window with Part ticked, From set to where the video is playing now, to download only a part of it
+#. the trailing ... means it is still going on: keep it
+#, machine
+extension	Download a part from here...	Télécharger une partie à partir d’ici...
 #. text in the browser extension
 #. command in the Downloads tab of the toolbar button's popup (the list of Mister Download Manager's newest downloads): downloads the file again from the start
 #, machine

@@ -2892,6 +2892,11 @@
 #. the trailing ... means it is still going on: keep it
 #, machine
 	Looking the page up...	Vyhledává se stránka...
+#. text in preview.rs
+#. the preview pane: still looking whether the file is there
+#. the trailing ... means it is still going on: keep it
+#, machine
+	Looking...	Hledá se...
 #. text in countries.rs
 #. a country's name (where a download's server is)
 #, machine
