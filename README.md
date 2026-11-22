@@ -24,7 +24,9 @@
   <img src="docs/images/browsers/opera.png" width="16" height="16" alt=""> Opera, Vivaldi and Helium too (<a href="docs/browser-integration.md">how</a>).</sub>
 </p>
 
-<p align="center">🔊 <a href="https://youtu.be/TATDxWuu4Q8"><b>Watch it with sound on YouTube</b></a> (1:09)</p>
+<p align="center">
+  <a href="https://youtu.be/TATDxWuu4Q8"><img src="docs/images/film-thumb.webp" alt="Mister Download Manager film, 1:09, plays on YouTube" width="880"></a>
+</p>
 
 <p align="center">
   <a href="https://trendshift.io/repositories/337427" target="_blank"><img src="https://trendshift.io/api/badge/trendshift/repositories/337427/daily?language=Rust" alt="Mister Download Manager on Trendshift: number 1 Rust repository of the day" width="200" height="44"></a><br>
