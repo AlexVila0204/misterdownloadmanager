@@ -1287,6 +1287,7 @@ impl FileInfo {
         route: crate::debrid::Route,
         downloads: PathBuf,
         dirs: Vec<(String, String)>,
+        looked: Option<Looked>,
         rt: &tokio::runtime::Handle,
         ctx: &egui::Context,
     ) -> Self {
@@ -1304,6 +1305,12 @@ impl FileInfo {
         let folder = crate::model::category_folder(category, &downloads, &dirs);
         let mut place = SaveAsPlace::new(Some(ctx));
         let save_as = place.name_in(&folder, &name);
+        // The browser's own download was looked at as it was handed over (#630): its answer
+        // is the one read, never asked again.
+        let (looked, kept) = match (looked, &from_browser) {
+            (Some((_, kept)), Some(_)) => (None, kept),
+            (looked, _) => (looked, None),
+        };
         let (probe, info) = match from_browser {
             Some(file_name) => (
                 Arc::new(Mutex::new(None)),
@@ -1320,7 +1327,10 @@ impl FileInfo {
                     web_page: false,
                 })),
             ),
-            None => (start_probe(rt, ctx, &new.url, &request), None),
+            None => match looked {
+                Some(looked) => (Arc::new(Mutex::new(Some(Ok(looked)))), None),
+                None => (start_probe(rt, ctx, &new.url, &request), None),
+            },
         };
         FileInfo {
             dest_dir: Default::default(),
@@ -1338,7 +1348,7 @@ impl FileInfo {
             remember: false,
             probe,
             info,
-            kept: None,
+            kept,
             edited: false,
             downloads,
             dirs,
@@ -2133,8 +2143,10 @@ fn cancel_waiting(ctx: &egui::Context, n: usize) -> Outcome<bool> {
 
 /// Look `url` up in the background (name, size) as the download will ask it (`request`), the
 /// answer landing in the slot returned.
-/// A look's result: what it learned, and its open answer when the download can read it.
-type Probed = Result<(ProbeInfo, Option<mdm_engine::KeptAnswer>), String>;
+/// What a look learned, and its open answer when the download can read it.
+pub type Looked = (ProbeInfo, Option<mdm_engine::KeptAnswer>);
+/// A look's result.
+type Probed = Result<Looked, String>;
 
 fn start_probe(
     rt: &tokio::runtime::Handle,
@@ -5370,6 +5382,7 @@ mod tests {
             Default::default(),
             downloads.to_owned(),
             Vec::new(),
+            None,
             rt.handle(),
             &egui::Context::default(),
         );

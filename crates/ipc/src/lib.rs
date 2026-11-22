@@ -331,6 +331,9 @@ impl Command {
             // An add's expected checksum is read before it is added: a bad one is answered,
             // not dropped while the add goes on.
             || (self.url.is_some() && self.checksum.is_some())
+            // The browser's own download is answered once the app has asked its address
+            // (#630): a one-time link the browser spent stays the browser's download.
+            || self.browser_handoff
     }
 }
 
@@ -535,10 +538,14 @@ pub fn request_checked(cmd: &Command) -> Result<String, SendError> {
     exchange(cmd, REPLY_WAIT + Duration::from_secs(1))
 }
 
+/// The app's answer to the browser's own download whose address no longer gives the file
+/// (#630): the browser keeps it.
+pub const SPENT: &str = "spent";
+
 /// How long a client reads for its answer (`send`, `request`).
 const ANSWER_WAIT: Duration = Duration::from_secs(2);
 /// How long the channel waits for the app's answer to a question before saying `timeout`.
-const REPLY_WAIT: Duration = Duration::from_secs(2);
+pub const REPLY_WAIT: Duration = Duration::from_secs(2);
 
 /// Why a command didn't reach the app.
 #[derive(Debug)]
@@ -561,8 +568,15 @@ impl std::fmt::Display for SendError {
 
 /// Send `cmd` to a running Mister Download Manager.
 pub fn send(cmd: &Command) -> Result<(), SendError> {
-    let ack = exchange(cmd, ANSWER_WAIT)?;
-    if ack.trim() == "ok" {
+    // A command answered once acted on is read a second past the channel's wait: its `timeout`
+    // still means the app has it and goes on with it.
+    let (wait, taken) = if cmd.wants_reply() {
+        (REPLY_WAIT + Duration::from_secs(1), &["ok", "timeout"][..])
+    } else {
+        (ANSWER_WAIT, &["ok"][..])
+    };
+    let ack = exchange(cmd, wait)?;
+    if taken.contains(&ack.trim()) {
         Ok(())
     } else {
         Err(SendError::Refused(if ack.is_empty() {
@@ -1209,6 +1223,23 @@ mod handoff_tests {
 
     /// The browser hand-off mark is off by default (older senders, the command line, MCP), only
     /// written when set, and a command carrying cookies is not marked by them.
+    /// The browser's own download is answered once the app looked at it (#630), a command
+    /// line's add as soon as it is taken.
+    #[test]
+    fn the_browser_hand_off_waits_for_its_answer() {
+        let handed = Command {
+            url: Some("https://x/a".into()),
+            browser_handoff: true,
+            ..Default::default()
+        };
+        assert!(handed.wants_reply());
+        let added = Command {
+            url: Some("https://x/a".into()),
+            ..Default::default()
+        };
+        assert!(!added.wants_reply());
+    }
+
     #[test]
     fn the_browser_hand_off_is_explicit() {
         let old: Command =

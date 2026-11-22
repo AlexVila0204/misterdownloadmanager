@@ -1039,6 +1039,12 @@ fn delivered(cmd: &mdm_ipc::Command) -> Reply {
     match deliver(cmd) {
         Ok(()) => Reply::done(),
         Err(Undelivered::NotRunning(e)) => Reply::failed("not-running", e),
+        Err(Undelivered::Refused(e)) if e == mdm_ipc::SPENT => {
+            log_line(
+                "browser integration: a browser keeps a download its address no longer gives MDM",
+            );
+            Reply::failed("spent", "the address no longer gives the file")
+        }
         Err(Undelivered::Refused(e)) if e.starts_with("too-large") => Reply::failed("too-large", e),
         Err(Undelivered::Refused(e)) => Reply::failed("refused", e),
     }

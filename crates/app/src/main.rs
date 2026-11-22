@@ -29,6 +29,7 @@ mod finish;
 mod freshlink;
 mod gallerydlg;
 mod grabber;
+mod handoff;
 mod headless;
 mod help;
 mod helpers;

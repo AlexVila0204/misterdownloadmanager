@@ -1335,8 +1335,14 @@ pub struct App {
     queues_open: bool,
     add_url: Option<AddUrl>,
     file_info: Option<FileInfo>,
-    /// Addresses (and their browser context) waiting for Download File Info to close.
-    file_info_waiting: std::collections::VecDeque<(dialogs::NewUrl, ipc::Command)>,
+    /// Addresses (and their browser context, and the hand-over's look) waiting for Download
+    /// File Info to close.
+    file_info_waiting:
+        std::collections::VecDeque<(dialogs::NewUrl, ipc::Command, Option<dialogs::Looked>)>,
+    /// The browser's own downloads being looked at before the browser lets them go (#630).
+    looks: Vec<crate::handoff::Look>,
+    /// The look of the hand-over `handle_command` is taking, for its download or dialog.
+    looked: Option<dialogs::Looked>,
     /// Download File Info's open answers, for the download each was given to (by id) to start
     /// from (#28: a one-time link refuses a second request).
     kept_answers: std::collections::HashMap<u64, mdm_engine::KeptAnswer>,
@@ -2190,6 +2196,8 @@ impl App {
             update_checked_this_run: None,
             file_info: None,
             file_info_waiting: Default::default(),
+            looks: Vec::new(),
+            looked: None,
             kept_answers: Default::default(),
             progress: Vec::new(),
             complete: Vec::new(),
@@ -3924,6 +3932,9 @@ impl App {
             };
             let size = cmd.size;
             let id = self.push_item(url, dest, category, String::new(), size, None, cmd, source);
+            if let Some(kept) = self.looked.take().and_then(|(_, kept)| kept) {
+                self.kept_answers.insert(id, kept);
+            }
             self.name_guessed(id, guessed);
             self.number_at_start(id);
             if later {
@@ -11066,9 +11077,64 @@ impl App {
     /// Download File Info for an address from Add URL, the browser (`context`) or the command
     /// line. One at a time: another that arrives meanwhile waits its turn (the browser has
     /// already given its own copy up, so none may be dropped).
+    /// The browser's own download, asked once before the browser lets it go (`handoff`, #630).
+    fn look_first(
+        &mut self,
+        cmd: ipc::Command,
+        reply: std::sync::mpsc::SyncSender<String>,
+        ctx: &egui::Context,
+    ) {
+        let url = cmd
+            .url
+            .as_deref()
+            .and_then(|u| url::Url::parse(u.trim()).ok())
+            .filter(mdm_engine::supported);
+        let Some(url) = url else {
+            let _ = reply.send("ok".into());
+            self.handle_command(cmd, ctx);
+            return;
+        };
+        let request = self.request_parts(&url, None, &cmd, crate::debrid::browser_started(&cmd));
+        let look = crate::handoff::Look::start(cmd, reply, url, &request, &self.rt, ctx);
+        self.looks.push(look);
+    }
+
+    /// The hand-overs whose look ended: taken as any command is, or left to the browser. True
+    /// when one was taken.
+    fn settle_looks(&mut self, ctx: &egui::Context) -> bool {
+        let mut taken = false;
+        let mut i = 0;
+        while i < self.looks.len() {
+            let Some(settled) = self.looks[i].poll() else {
+                i += 1;
+                continue;
+            };
+            self.looks.remove(i);
+            if let crate::handoff::Settled::Take(handed) = settled {
+                let (cmd, looked) = *handed;
+                self.looked = looked;
+                self.handle_command(cmd, ctx);
+                self.looked = None;
+                taken = true;
+            }
+        }
+        taken
+    }
+
     fn open_file_info(&mut self, new: dialogs::NewUrl, context: ipc::Command, ctx: &egui::Context) {
+        let looked = self.looked.take();
+        self.open_file_info_looked(new, context, looked, ctx);
+    }
+
+    fn open_file_info_looked(
+        &mut self,
+        new: dialogs::NewUrl,
+        context: ipc::Command,
+        looked: Option<dialogs::Looked>,
+        ctx: &egui::Context,
+    ) {
         if self.file_info.is_some() {
-            self.file_info_waiting.push_back((new, context));
+            self.file_info_waiting.push_back((new, context, looked));
             return;
         }
         let direct = crate::debrid::browser_started(&context);
@@ -11080,6 +11146,7 @@ impl App {
             self.debrid_route(),
             self.downloads.clone(),
             self.settings.category_dirs.clone(),
+            looked,
             &self.rt,
             ctx,
         );
@@ -13076,9 +13143,9 @@ impl App {
         }
         // The next download that waited for Download File Info.
         if self.file_info.is_none()
-            && let Some((new, context)) = self.file_info_waiting.pop_front()
+            && let Some((new, context, looked)) = self.file_info_waiting.pop_front()
         {
-            self.open_file_info(new, context, ctx);
+            self.open_file_info_looked(new, context, looked, ctx);
         }
         self.finish_stopped();
         let mut actions = Vec::new();
@@ -13404,6 +13471,9 @@ impl App {
         while let Ok(inc) = self.commands.try_recv() {
             handled = true;
             match inc.reply {
+                Some(reply) if inc.cmd.browser_handoff && !inc.cmd.remote => {
+                    self.look_first(inc.cmd, reply, ctx);
+                }
                 Some(reply) => {
                     let _ = reply.send(self.answer(&inc.cmd, ctx));
                 }
@@ -13412,6 +13482,10 @@ impl App {
                     self.handle_command(inc.cmd, ctx);
                 }
             }
+        }
+        if self.settle_looks(ctx) {
+            handled = true;
+            opens = true;
         }
         // macOS: hidden from the menu bar icon, the whole app is hidden and draws no window, so
         // the window the command opens would never appear (the browser's Download video button
@@ -13624,8 +13698,14 @@ impl App {
         let mut unseen: Vec<Unseen> = self
             .file_info_waiting
             .drain(..)
-            .map(|(new, context)| (new.url, new.login, context))
+            .map(|(new, context, _)| (new.url, new.login, context))
             .collect();
+        for look in self.looks.drain(..) {
+            let context = look.abandon();
+            if let Some(url) = context.url.as_deref().and_then(|u| url::Url::parse(u).ok()) {
+                unseen.push((url, None, context));
+            }
+        }
         // The one Download File Info shows, unanswered (an early download is in the list
         // already).
         if let Some(fi) = self.file_info.take()
@@ -13634,7 +13714,7 @@ impl App {
             unseen.insert(0, (fi.url.clone(), fi.login.clone(), fi.context.clone()));
         }
         while let Ok(inc) = self.commands.try_recv() {
-            if inc.reply.is_none()
+            if (inc.reply.is_none() || inc.cmd.browser_handoff)
                 && let Some(url) = inc
                     .cmd
                     .url
